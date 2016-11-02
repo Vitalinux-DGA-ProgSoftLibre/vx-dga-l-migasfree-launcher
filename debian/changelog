@@ -1,0 +1,33 @@
+vx-dga-l-migasfree-launcher (5.0-3) unstable; urgency=low
+
+  * Versión Migasfree Launcher para Lubuntu
+  * Comprobamos la ruta /var/tmp/migasfree & first-tags.conf para crearlos o no
+  * En el caso de que first-tags.conf este vacío se ejecutará migasfree-tags --set
+  * Configuramos el /etc/resolv.conf a traves del programa resolvconf, mediante su archivo base
+  * En el primer arranque decidimos el usuario con el cual iniciamos sesión de manera automática o no
+  * Incluimos la lista de redes wireless que ya existen en los centros
+  * Se han ajustado los permisos de los archivos wireless ubicados en /etc/NetworkManager/system-connections
+  * Se ha configurado el repositorio de google-chrome para que tire del caché si este esta presente
+  * Se añade en la configuracion de los repositorios la opcion de disponer de un servidor apt-proxy
+  * Se divide en scripts las funciones del migasfree-launcher
+  * Se ha modificado el script asociado al usuario de inicio de sesión
+  * Se ha añadido un script para que el usuario decida si el uso de Vitalinux desde un centro o de uso doméstico
+  * Se ha añadido el comando apt-get install -f en el script dpkg-configuracion
+  * Se ha actualizado la contraseña del IES Miguel Servet
+  * Se han añadido comentarios informativos hacia la salida de la consola migasfree
+  * Se ha modificado el rsync de redes wireless para que solo se actualicen y añadan las que queremos
+  * Se ha configurado adecuadamente la MAC de la interfaz wireless en las redes wireless por defecto
+  * Se ha cambiado el orden de los scripts de prerun
+  * Se ha modificado el script del uso-vitalinux para tener en cuenta la etiqueta de ENT-CASA
+  * Se ha modificado el script del uso-vitalinux para decidir si queremos o no crear una cuenta de usuario nueva
+  * Se ha modificado el orden de ejecución de los scripts prerun.d para configurar en primer lugar la red
+  * Se ha creado un script para configurar el Wallpaper adecuadamente en la post-instalación
+  * Se han ajustado las redes Wireless
+  * Se ha cambiado la dependecia de vx-migasfree-launcher a migasfree-launcher
+  * Se ha añadido la red Wireless del CRA Algars y del CEIP Jardiel
+  * 2016-6-13: Se ha añadido un script en prerun.d para deshabilitar plank y gnome-pie
+  * 2016-10-7: Se ha corregido el apt-get -f --assume-yes --force-yes install
+  * 2016-10-7: Se ha corregido el error del sed al tratar de modificar vx-dga-repos-mirror.list
+  * 2016-20-28: Se ha añadido la dependencia con bikeshed para eliminar kernels antiguos en el prerun
+
+ -- Arturo Martín <amartinromero@gmail.com>  Fri, 8 Jul 2016 6:55:06 +0200

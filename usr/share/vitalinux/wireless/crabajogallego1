@@ -1,0 +1,15 @@
+[connection]
+id=crabajogallego1
+uuid=ecf9f5b6-a858-48b5-9e9d-0e8814e9d0e8
+type=802-11-wireless
+
+[802-11-wireless]
+ssid=Evo-W300AR
+mode=infrastructure
+mac-address=
+
+[ipv4]
+method=auto
+
+[ipv6]
+method=auto

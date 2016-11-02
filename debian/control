@@ -1,0 +1,15 @@
+Source: vx-dga-l-migasfree-launcher
+Section: utils
+Priority: extra
+Maintainer: Arturo Martín <amartinromero@gmail.com>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.3
+Homepage: https://github.com/migasfree/migasfree-launcher
+
+Package: vx-dga-l-migasfree-launcher
+Architecture: all
+Depends: ${misc:Depends}, migasfree-client (>=4.5), vx-dga-l-migasfree-client, vx-dga-l-variables-conf, bikeshed, vx-dga-l-iconos, migasfree-launcher (>=1.13)
+Replace: vx-dga-l-migasfree-launcher (< 5.0), vx-migasfree-launcher
+Conflicts: vx-dga-l-migasfree-launcher (< 5.0), vx-migasfree-launcher
+Description: migasfree launcher para vitalinux edu DGA
+ migasfree launcher adaptado para la versión vx edu (dga)
