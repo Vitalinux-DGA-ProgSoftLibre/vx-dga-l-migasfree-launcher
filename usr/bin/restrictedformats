@@ -1,0 +1,44 @@
+#!/bin/bash
+#https://help.ubuntu.com/community/RestrictedFormats#Easy_Install
+
+_text="
+Vitalinux no incluye por defecto software propietario. Sin
+embargo puede necesitar ejecutar formatos no libres, tales
+como DVD, MP3, Quicktime, y formatos de Windows Media.
+
+Componentes que se instalarán: <a href=\"http://es.wikipedia.org/wiki/GStreamer\">GStreamer</a>, <a href=\"http://es.wikipedia.org/wiki/Adobe_Flash_Player\">Flash Player</a>,
+<a href=\"http://es.wikipedia.org/wiki/IcedTea\">Icedtea</a>, <a href=\"http://en.wikipedia.org/wiki/Libavcodec\">libavcodec</a>, <a href=\"https://code.google.com/p/mp4v2\">mp4v2</a>, <a href=\"http://es.wikipedia.org/wiki/Unrar\">unrar</a>, <a href=\"http://en.wikipedia.org/wiki/Core_fonts_for_the_Web\">Core fonts</a>
+
+¿Ha leído la <a href=\"http://www.microsoft.com/typography/fontpack/eula.htm\">Corefont EULA</a> y acepta instalar este software,
+así como el resto del software anteriormente mencionado?
+
+<span font=\"8\">Nota: Las leyes sobre patentes y copyright operan de manera diferente dependiendo
+del país. Por favor, obtenga asesoramiento jurídico si no está seguro si una patente
+o restricción particular se aplica a un formato de medios que desea utilizar.</span>
+"
+
+_cmd="zenity --question --title 'Formatos restrictivos' --no-wrap --text '$_text'"
+su -c "$_cmd" $SUDO_USER
+if [ $? == 0 ] ; then
+    # Aceptar mscorefonts-eula
+    echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true | debconf-set-selections
+
+    # Reinstalar ttf-mscorefonts-installer
+    dpkg -l ttf-mscorefonts-installer>/dev/null
+    if [ $? = 0 ] ; then
+        apt-get --reinstall install ttf-mscorefonts-installer
+    fi
+
+    # Instalar ubuntu-restricted-extra
+    apt-get install --force-yes --assume-yes ubuntu-restricted-extras
+
+    # Instalar libdvdread4
+    /usr/share/doc/libdvdread4/install-css.sh
+else
+    _text="
+Si necesita más adelante instalar este software ejecute
+el comando:
+    <b>sudo restrictedformats</b>
+"
+    zenity --info --title 'Formatos restrictivos' --no-wrap --text "$_text"
+fi

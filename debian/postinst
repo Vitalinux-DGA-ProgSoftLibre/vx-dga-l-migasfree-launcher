@@ -35,6 +35,9 @@ case "$1" in
 	if test -d /usr/share/migasfree-launcher/postrun.d ; then
 		chmod +x /usr/share/migasfree-launcher/postrun.d/*
 	fi
+	if test -f /usr/bin/restrictedformats ; then
+		chmod +x /usr/bin/restrictedformats
+	fi
 
 # Comprobamos si hay una interfaz wireless en el equipo y configuramos las redes
 INTERFAZ=$(iwconfig 2> /dev/null | tr -s " " " " | cut -d" " -f1 | grep -v ^" " | sed -e "/^$/d" | head -1)

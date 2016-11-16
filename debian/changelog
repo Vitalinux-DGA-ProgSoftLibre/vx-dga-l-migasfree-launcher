@@ -1,4 +1,4 @@
-vx-dga-l-migasfree-launcher (5.0-3) unstable; urgency=low
+vx-dga-l-migasfree-launcher (5.0-5) unstable; urgency=low
 
   * Versión Migasfree Launcher para Lubuntu
   * Comprobamos la ruta /var/tmp/migasfree & first-tags.conf para crearlos o no
@@ -29,5 +29,7 @@ vx-dga-l-migasfree-launcher (5.0-3) unstable; urgency=low
   * 2016-10-7: Se ha corregido el apt-get -f --assume-yes --force-yes install
   * 2016-10-7: Se ha corregido el error del sed al tratar de modificar vx-dga-repos-mirror.list
   * 2016-20-28: Se ha añadido la dependencia con bikeshed para eliminar kernels antiguos en el prerun
+  * 2016-11-7: Se ha añadido la Wireless del IES Pablo Serrano
+  * 2016-11-16: Se añade el ejecutable de restrictedformats, eliminado con la indepencia de vx-launcher
 
  -- Arturo Martín <amartinromero@gmail.com>  Fri, 8 Jul 2016 6:55:06 +0200
