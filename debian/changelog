@@ -1,4 +1,12 @@
-vx-dga-l-migasfree-launcher (5.0-5) unstable; urgency=low
+vx-dga-l-migasfree-launcher (5.1-1) unstable; urgency=low
+
+  * Limpieza de creación sources con mirrors antiguos (v7) y uso del nuevo mirror global
+  * Forzar teclado en español al inicio
+  * Update información wireless 
+
+ -- Ignacio Sancho <sannacho@gmail.com>  Tue, 29 Nov 2016 00:15:06 +0200
+ 
+vx-dga-l-migasfree-launcher (5.0-7) unstable; urgency=low
 
   * Versión Migasfree Launcher para Lubuntu
   * Comprobamos la ruta /var/tmp/migasfree & first-tags.conf para crearlos o no
@@ -31,5 +39,6 @@ vx-dga-l-migasfree-launcher (5.0-5) unstable; urgency=low
   * 2016-20-28: Se ha añadido la dependencia con bikeshed para eliminar kernels antiguos en el prerun
   * 2016-11-7: Se ha añadido la Wireless del IES Pablo Serrano
   * 2016-11-16: Se añade el ejecutable de restrictedformats, eliminado con la indepencia de vx-launcher
+  * 2016-11-23: Se añade la nueva Wireless del IES Rodanas
 
  -- Arturo Martín <amartinromero@gmail.com>  Fri, 8 Jul 2016 6:55:06 +0200
