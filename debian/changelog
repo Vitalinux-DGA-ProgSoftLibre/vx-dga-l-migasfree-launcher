@@ -1,3 +1,13 @@
+vx-dga-l-migasfree-launcher (5.1-3) unstable; urgency=low
+
+  * Se ha añadido la wireless del IES Torre de los Espejos de Utebo
+  * Se ha corregido algunos bug con las ventanas yad
+  * Se ha añadido la opción de deshabilitar el cliente Migasfree para ENT-CASA
+  * Se ha quitado la opción de eliminar usuarios preconfigurados durante la post-instalación
+  * Se corrige la busqueda de la clave de chrome por la nueva
+
+ -- Arturo Martín <amartinromero@gmail.com>  Sun, 18 Nov 2016 00:15:06 +0200
+
 vx-dga-l-migasfree-launcher (5.1-1) unstable; urgency=low
 
   * Limpieza de creación sources con mirrors antiguos (v7) y uso del nuevo mirror global

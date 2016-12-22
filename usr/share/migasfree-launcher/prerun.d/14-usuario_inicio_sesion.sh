@@ -12,19 +12,23 @@ USERDEFINITIVO=""
 
 function eliminar-usuarios-del-sistema {
 
-	TEXTO="¿Quieres <b>eliminar o modificar los usuarios predefinidos</b> que existen en el sistema?\n\n\
-<b>Vitalinux EDU DGA</b> es un sistema que viene con unas cuentas preconfiguradas: <b>alumno, profesor, dga y control</b> \n\n\
-¡¡En caso de querer eliminar todos esos usuarios del sistema asegurate de haber creado y confirmado una cuenta de usuario con perfil de <b>Administrador</b>!! \n"
-
-	if yad --title "¿Eliminar Usuarios Predefinidos?" --center \
+#	TEXTO="¿Quieres <b>eliminar o modificar los usuarios predefinidos</b> que existen en el sistema?\n\n\
+#<b>Vitalinux EDU DGA</b> es un sistema que viene con unas cuentas preconfiguradas: <b>alumno, profesor y dga</b> \n\n\
+#¡¡En caso de querer eliminar todos esos usuarios del sistema asegurate de haber creado y confirmado una cuenta de usuario con perfil de <b>Administrador</b>!! \n"
+	TEXTO="Debes saber que <b>Vitalinux</b> tiene preconfiguradas tres cuentas de usuario con contraseñas de conocimiento público:\n\n"
+	TEXTO="${TEXTO} <b>alumno</b>: usuario sin privilegios\n"
+	TEXTO="${TEXTO} <b>profesor</b>: usuario con privilegios de <b>administrador</b>\n"
+	TEXTO="${TEXTO} <b>dga</b>: usuario con privilegios de <b>administrador</b>\n\n"
+	TEXTO="${TEXTO} Para modificar o eliminar esas cuentas de usuario puedes lanzar el gestor de usuarios del sistema (CONTROL + ESPACIO y escribes <b>usuarios y grupos</b>) con alguna <b>cuenta de Administrador</b> preconfigurada o que hayas creado\n"
+	yad --title "¿Interesado en Eliminar Usuarios Predefinidos?" --center \
        --text "$TEXTO" \
        --text-align center \
-       --window-icon vitalinux-64x \
-       --image vitalinux-64x \
+       --window-icon vitalinux \
+       --image vitalinux \
        --width=500 \
-       --button="Saltar":1 --button="Administrar Cuentas":0 ; then
-		sudo -u $(who | grep " :0 " | cut -d" " -f1 | sort -u) /usr/bin/users-admin
-	fi
+       --button="Continuar":0
+		#sudo -u $(who | grep " :0 " | cut -d" " -f1 | sort -u) /usr/bin/users-admin
+
 
 }
 
@@ -123,7 +127,7 @@ A lo hora de crear un nuevo usuario recuerda tener en cuenta lo siguiente: \n\n\
 
 function decidir-usuario-inicio-sesion {
 	MENSAJE="$1"
-	USUARIO=$(yad --center --width 500 \
+	if USUARIO=$(yad --center --width 500 \
 	--window-icon vitalinux-64x \
 	--title "Inicio de Sesión Automático" \
 	--text-align center \
@@ -135,23 +139,24 @@ function decidir-usuario-inicio-sesion {
 	"Usuario Nuevo a Crear" \
 	$(awk -F ":" '{if ( $3 > 999 && $6~/\/home\/.*/) {print $1}}' /etc/passwd) \
 	"Usuario LDAP" \
-	--button="Confirmar Selección:0")
+	--button="Confirmar Selección:0") ; then
 
-	if test "$USUARIO" == "Usuario Nuevo a Crear" ; then
-		TEXTO="  ¡¡Ok!! Vamos a <b>crear un nuevo usuario</b> en Vitalinux  \n\n\
-  Usuarios Existentes: <b>$USUARIOSEXISTENTES</b> \n\n\
-  A lo hora de crear un nuevo usuario recuerda tener en cuenta lo siguiente: \n\n\
-   1.- El nombre del usuario no debe tener espacios en blanco \n\
-   2.- No se puede usar el nombre de un usuario ya existente en Vitalinux \n\
-   3.- No utilizes mayúsculas para el nombre \n\
-   4.- Puedes usar números \n"
-		if crear-usuario "$TEXTO" ; then
-			configurar-usuario-inicio-automatico-lightdm "$USUARIO"
+		if test "$USUARIO" == "Usuario Nuevo a Crear" ; then
+			TEXTO="  ¡¡Ok!! Vamos a <b>crear un nuevo usuario</b> en Vitalinux  \n\n\
+	  Usuarios Existentes: <b>$USUARIOSEXISTENTES</b> \n\n\
+	  A lo hora de crear un nuevo usuario recuerda tener en cuenta lo siguiente: \n\n\
+	   1.- El nombre del usuario no debe tener espacios en blanco \n\
+	   2.- No se puede usar el nombre de un usuario ya existente en Vitalinux \n\
+	   3.- No utilizes mayúsculas para el nombre \n\
+	   4.- Puedes usar números \n"
+			if crear-usuario "$TEXTO" ; then
+				configurar-usuario-inicio-automatico-lightdm "$USUARIO"
+			else
+				decidir-usuario-inicio-sesion "$MENSAJE"
+			fi
 		else
-			decidir-usuario-inicio-sesion "$MENSAJE"
-		fi
-	else
-		configurar-usuario-inicio-automatico-lightdm "$USUARIO"
+			configurar-usuario-inicio-automatico-lightdm "$USUARIO"
+		fi	
 	fi
 }
 

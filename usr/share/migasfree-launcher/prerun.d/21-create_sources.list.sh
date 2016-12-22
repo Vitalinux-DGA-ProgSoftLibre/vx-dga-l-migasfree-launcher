@@ -50,11 +50,13 @@ if ! apt-key list | grep ${1} > /dev/null 2> /dev/null ; then
 fi
 }
 
+echo "--> Seguimos con la creación del sources.list ...."
+
 # Revisión e instalación de las claves necesarias:
 # Libreoffice
 install_apt_key 1378B444 keyserver.ubuntu.com
 # Chrome. No hace uso del servidores de claves, sino de uno propio
-if ! apt-key list | grep C07CB649 > /dev/null 2> /dev/null ; then
+if ! apt-key list | grep 640DB551 > /dev/null 2> /dev/null ; then
 	echo "Clave Google no encontrada...Instalando"
 	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 fi
