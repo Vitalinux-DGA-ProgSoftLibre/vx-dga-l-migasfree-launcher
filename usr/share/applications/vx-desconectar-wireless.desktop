@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Eliminar Wireless de Centros Vitalinux
+Name[es]=Eliminar Wireless de Centros Vitalinux
+Name[es_ES]=Eliminar Wireless de Centros Vitalinux
+Comment=Elimina las Wireless de Centros Vitalinux
+Icon=wireless-desconectar
+Exec=sudo /usr/bin/vx-eliminar-wireless
+Terminal=false
+Type=Application
+Categories=Sistema;
+StartupNotify=true
+Hidden=false

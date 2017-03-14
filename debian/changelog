@@ -1,3 +1,52 @@
+vx-dga-l-migasfree-launcher (5.2-5) unstable; urgency=low
+
+  * Se elimina la dependencia de tareas-logout. La salida se centraliza en vx-scripts-apagado, configurado en vx-dga-l-skel-usuarios
+
+ -- Ignacio Sancho <sannacho@gmail.com>  Tue, 4 Mar 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (5.2-4) unstable; urgency=low
+
+  * Se han añadido las wireless de Almudevar y IES de Sabiñanigo
+  * Se ha añadido la wireless del CEIP Juan Pablo Bonet
+  * Se ha añadido la wireless de la CPEPA Bajo Cinca
+  * Se ha añadido la wireless del IES Miralbueno
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 2 Mar 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (5.2-2) unstable; urgency=low
+
+  * Se ha modificado la conf-wireless para dar soporte a Wireless abiertas
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 9 Feb 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (5.2-1) unstable; urgency=low
+
+  * Se añaden nuevos repositorios: getdeb, openjdk-r y partner de canonical
+
+ -- Ignacio Sancho <sannacho@gmail.com>  Fri, 3 Feb 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (5.1-7) unstable; urgency=low
+
+  * Se ha añadido un script prerun de Vitalinux para informar de fallo de conectividad
+
+ -- Arturo Martín <amartinromero@gmail.com>  Mon, 16 Jan 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (5.1-5) unstable; urgency=low
+
+  * Se eliminan las wireless de los centros vitalinux que tienen varias
+
+ -- Arturo Martín <amartinromero@gmail.com>  Mon, 16 Jan 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (5.1-4) unstable; urgency=low
+
+  * Se ha ordenado adecuadamente los scripts de prerun.d
+  * Se ha creado un base-prerun para definir variables globales a los scripts
+  * Se ha añadido un script prerun de post-instalación para poder modificar el hostname
+  * Se ha creado un prerun.d en /usr/share/vitalinux que se ejecuta al inicio
+  * Se ha modificado el script de las wireless haciendo uso de nmcli
+
+ -- Arturo Martín <amartinromero@gmail.com>  Mon, 9 Jan 2017 00:15:06 +0200
+
 vx-dga-l-migasfree-launcher (5.1-3) unstable; urgency=low
 
   * Se ha añadido la wireless del IES Torre de los Espejos de Utebo

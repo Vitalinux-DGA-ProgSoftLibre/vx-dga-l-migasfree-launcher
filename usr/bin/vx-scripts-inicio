@@ -1,0 +1,27 @@
+#!/bin/bash
+
+export _FIRST=/var/tmp/migasfree/first-tags.conf
+
+function run_scripts
+{
+    local _PATH="$1"
+
+    if [ -d "$_PATH" ]
+    then
+        for _FILE in "$_PATH"/*.sh
+        do
+            if [ -r "$_FILE" ]
+            then
+                . "$_FILE"
+            fi
+        done
+    fi
+}
+
+if test "${USER}" = "root" ; then
+	# execute prerun scripts
+	if test -d /usr/share/vitalinux/prerun.d ; then
+        run_scripts /usr/share/vitalinux/prerun.d
+	fi
+fi
+

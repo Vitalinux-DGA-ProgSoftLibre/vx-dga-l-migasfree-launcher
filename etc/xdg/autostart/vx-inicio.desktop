@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Scripts de Inicio de Vitalinux
+Name[es_ES]=Scripts de Inicio de Vitalinux
+Exec=sudo vx-scripts-inicio
+Encoding=UTF-8
+Type=Application
+X-GNOME-Autostart-enabled=true

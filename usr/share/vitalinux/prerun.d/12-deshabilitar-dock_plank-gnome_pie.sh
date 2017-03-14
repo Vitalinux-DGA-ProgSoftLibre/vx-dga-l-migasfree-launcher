@@ -5,7 +5,7 @@ if [ -f $_FIRST ] ; then
 # Deshabilitamos el Dock Plank
 	if test -f /etc/xdg/autostart/lanzar-dock-plank.desktop ; then
 		if chmod 000 /etc/xdg/autostart/lanzar-dock-plank.desktop ; then
-			echo "--> Se ha deshabilitado el Dock Plank por defecto ..."
+			echo "=> $(date) - Se ha deshabilitado el Dock Plank por defecto ..." >> ${LOGVX}
 		fi
 	fi
 	for HOMEUSU in $( getent passwd | awk -F ":" '{if ( $3 > 999 &&  $7~/\/bin\/.*/) {print $6}}' ) ; do
@@ -16,7 +16,7 @@ if [ -f $_FIRST ] ; then
 # Deshabilitamos el dock circular Gnome-pie
 	if test -f /etc/xdg/autostart/gnome-pie.desktop ; then
 		if chmod 000 /etc/xdg/autostart/gnome-pie.desktop ; then
-			echo "--> Se ha deshabilitado el dock circular Gnome Pie por defecto ..."
+			echo "=> $(date) - Se ha deshabilitado el dock circular Gnome Pie por defecto ..." >> ${LOGVX}
 		fi
 	fi
 

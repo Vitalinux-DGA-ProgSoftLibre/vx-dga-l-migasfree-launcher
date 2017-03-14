@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [ "$(whoami)" = "root" ] ; then
+	if [ -z "$1" ] ; then
+		if test -d /etc/NetworkManager/system-connections ; then
+			if rm -f /etc/NetworkManager/system-connections/vx-* ; then
+				echo "=> Se han eliminado las redes wireless vx-*"
+				notify-send \
+					"Wireless Centros Vitalinux" "Se han eliminado las redes de centros Vitalinux configuradas" \
+					-i vitalinux -t 5000
+			fi
+		fi
+	else
+		if test -d /etc/NetworkManager/system-connections ; then
+			if ( nmcli -t -f device,type dev status  | grep wireless &> /dev/null ) ; then
+
+				DEVICEWIRELESS="$(nmcli -t -f device,type dev status  | grep wireless | cut -d":" -f1)"
+				REDWIRELESSCONECTADO="$(nmcli -t -f devices,name con status \
+						| grep "${DEVICEWIRELESS}:" | cut -d':' -f2)"
+				if ! [ -z ${REDWIRELESSCONECTADO} ] ; then
+					NOMBRERED="$(cat "/etc/NetworkManager/system-connections/${REDWIRELESSCONECTADO}" \
+						| grep "ssid" | cut -d"=" -f2)"
+					WIRELESSCENTROS="/usr/share/vitalinux/wireless/.vx-wireless-centros"
+					if ( grep ":${REDWIRELESSCONECTADO}:" ${WIRELESSCENTROS} &> /dev/null ) && \
+						[ $(grep ":${REDWIRELESSCONECTADO}:" ${WIRELESSCENTROS} | cut -d":" -f5) -eq 1 ] ; then
+						if rm -f /etc/NetworkManager/system-connections/${REDWIRELESSCONECTADO} ; then
+							echo "=> Se han eliminado las redes wireless: ${NOMBRERED}"
+							notify-send \
+								"Wireless Centros Vitalinux" "Se han eliminado las redes de centros Vitalinux: ${NOMBRERED}" \
+								-i vitalinux -t 5000
+						fi
+					fi
+				fi
+
+			fi
+		fi
+	fi
+	exit 0
+else
+	echo "=> Necesitas privilegios de Root para eliminar las redes Wireless"
+	exit 1
+fi
+

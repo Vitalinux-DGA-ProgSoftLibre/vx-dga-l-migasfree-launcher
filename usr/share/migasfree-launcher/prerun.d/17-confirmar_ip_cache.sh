@@ -29,7 +29,7 @@ En el caso de que NO dispongas de ningún servidor Caché en el centro, puedes d
 					--image equipo-torre-64x \
 					--title "IP del Servidor Caché" \
 					--text-align center --justify="center" \
-					--text "Por favor confirma la la IP Indicada: \n\n $CACHE" \
+					--text "Por favor confirma la IP Indicada: \n\n $CACHE" \
 					--button="Corregir IP":1 --button="Confirmar IP":0 \
 					--buttons-layout center ; then
 				VALIDO=1

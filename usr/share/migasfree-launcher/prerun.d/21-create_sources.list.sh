@@ -38,6 +38,16 @@ deb ${_SRV}/libreoffice-5-2 trusty main
 
 # Chrome. Solo para 64 bits
 deb [arch=amd64] ${_SRV}/google stable main
+
+# Partners Ubuntu
+deb ${_SRV}/canonical-partner trusty partner
+
+# OpenJDK
+deb ${_SRV}/openjdk-r trusty main
+
+# Getdeb
+deb ${_SRV}/getdeb trusty-getdeb apps
+
 EOF
 }
 
@@ -55,16 +65,29 @@ echo "--> Seguimos con la creación del sources.list ...."
 # Revisión e instalación de las claves necesarias:
 # Libreoffice
 install_apt_key 1378B444 keyserver.ubuntu.com
+# openjdk-r
+install_apt_key 86F44E2A keyserver.ubuntu.com
+# Getdeb
+if ! apt-key list | grep 46D7E7CF > /dev/null 2> /dev/null ; then
+	echo "Clave Getdeb no encontrada...Instalando"
+	wget -q -O - http://archive.getdeb.net/getdeb-archive.key | apt-key add - > /dev/null
+fi
 # Chrome. No hace uso del servidores de claves, sino de uno propio
 if ! apt-key list | grep 640DB551 > /dev/null 2> /dev/null ; then
 	echo "Clave Google no encontrada...Instalando"
-	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - > /dev/null
 fi
 # Limpiar los sources que existan antiguos
 # Libreoffice
 find /etc/apt/sources.list.d/ -regextype posix-egrep -regex '.*libreoffice.*list$' -exec mv '{}' '{}'.save \;
 # Chrome
 find /etc/apt/sources.list.d/ -regextype posix-egrep -regex '.*chrome.*list$' -exec mv '{}' '{}'.save \;
+# openjdk-r
+find /etc/apt/sources.list.d/ -regextype posix-egrep -regex '.*openjdk-r.*list$' -exec mv '{}' '{}'.save \;
+# getdeb
+find /etc/apt/sources.list.d/ -regextype posix-egrep -regex '.*getdeb.*list$' -exec mv '{}' '{}'.save \;
+# Canonical?
+find /etc/apt/sources.list.d/ -regextype posix-egrep -regex '.*canonical.*list$' -exec mv '{}' '{}'.save \;
 # Limpiamos cualquier resto antiguo de mirror caches v7
 if test -f ${SOURCESMIRROR_OLD} ; then
 		mv ${SOURCESMIRROR} ${SOURCESMIRROR_OLD}.save

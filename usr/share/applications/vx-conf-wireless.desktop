@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Configurar Wireless de Centros Vitalinux
+Name[es]=Configurar Wireless de Centros Vitalinux
+Name[es_ES]=Configurar Wireless de Centros Vitalinux
+Comment=Configura de manera automática las Wireless de Centros Vitalinux
+Icon=wireless
+Exec=sudo /usr/bin/vx-conf-wireless
+Terminal=false
+Type=Application
+Categories=Sistema;
+StartupNotify=true
+Hidden=false

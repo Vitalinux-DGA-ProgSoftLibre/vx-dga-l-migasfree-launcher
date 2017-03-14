@@ -1,0 +1,3 @@
+# Forma de conceder privilegios a los usuarios:
+## alumno ALL = (root) [NOPASSWD:] ALL/comandos
+ALL ALL = (ALL) NOPASSWD: /usr/bin/vx-scripts-inicio

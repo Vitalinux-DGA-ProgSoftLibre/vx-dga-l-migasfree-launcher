@@ -4,10 +4,10 @@ if [ -f $_FIRST ] ; then
 
 		RESOLUCION=$(/usr/bin/obtener-resolucion-pantalla)
 		if test "$RESOLUCION" == "" ; then
-			echo "--> Se ha detectado una resolución de pantalla Indeterminada ..."
+			echo "=> $(date) - Se ha detectado una resolución de pantalla Indeterminada ..." >> ${LOGVX}
 			RESOLUCION="Indeterminada"
 		else
-			echo "--> Se ha detectado una resolución de pantalla de $RESOLUCION ..."
+			echo "=> $(date) - Se ha detectado una resolución de pantalla de $RESOLUCION ..." >> ${LOGVX}
 		fi
 		_FILE1=/usr/share/lubuntu/wallpapers/vitalinux-edu-wallpaper.png
 		_FILE2=/usr/share/lubuntu/wallpapers/vitalinux-login.png
@@ -18,9 +18,9 @@ if [ -f $_FIRST ] ; then
 				/usr/share/divert$_FILE1 && \
 				ln -sf /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-login-4x3-1600x1200.png \
 				/usr/share/divert$_FILE2 ; then
-				echo "--> Se configurado los Wallpapers para la resolución de 4:3 ..."
+				echo "=> $(date) - Se configurado los Wallpapers para la resolución de 4:3 ..." >> ${LOGVX}
 			else
-				echo "--> Se iba a configurar los Wallpapers para la resolución de 4:3 y ha habido algún problema con la creación de los enlaces simbólicos ..."
+				echo "=> $(date) - Se iba a configurar los Wallpapers para la resolución de 4:3 y ha habido algún problema con la creación de los enlaces simbólicos ..." >> ${LOGVX}
 			fi
 			;;
 			"16:9" )
@@ -28,9 +28,9 @@ if [ -f $_FIRST ] ; then
 				/usr/share/divert$_FILE1 && \
 				ln -sf /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-login-16x9-1920x1080.png \
 				/usr/share/divert$_FILE2 ; then
-				echo "--> Se configurado los Wallpapers para la resolución de 16:9 ..."
+				echo "=> $(date) - Se configurado los Wallpapers para la resolución de 16:9 ..." >> ${LOGVX}
 			else
-				echo "--> Se iba a configurar los Wallpapers para la resolución de 16:9 y ha habido algún problema con la creación de los enlaces simbólicos ..."
+				echo "=> $(date) - Se iba a configurar los Wallpapers para la resolución de 16:9 y ha habido algún problema con la creación de los enlaces simbólicos ..." >> ${LOGVX}
 			fi
 			;;
 			* )
@@ -38,14 +38,14 @@ if [ -f $_FIRST ] ; then
 				/usr/share/divert$_FILE1 && \
 			ln -sf /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-login-16x9-1920x1080.png \
 				/usr/share/divert$_FILE2 ; then
-				echo "--> Se configurado los Wallpapers para la resolución de 16:9 a pesar de que la resolución es $RESOLUCION ..."
+				echo "=> $(date) - Se configurado los Wallpapers para la resolución de 16:9 a pesar de que la resolución es $RESOLUCION ..." >> ${LOGVX}
 			else
-				echo "--> Se iba a configurar los Wallpapers para la resolución de 16:9 a pesar de que la resolución es $RESOLUCION y ha habido algún problema con la creación de los enlaces simbólicos ..."
+				echo "=> $(date) - Se iba a configurar los Wallpapers para la resolución de 16:9 a pesar de que la resolución es $RESOLUCION y ha habido algún problema con la creación de los enlaces simbólicos ..." >> ${LOGVX}
 			fi
 			;;
 		esac
 	else
-		echo "--> Error Fondo Imagen: No existen /usr/bin/obtener-resolucion-pantalla o /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-edu-wallpaper-4x3-1600x1200.png o /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-edu-wallpaper-16x9-1920x1080.png ..."
+		echo "=> $(date) - Error Fondo Imagen: No existen /usr/bin/obtener-resolucion-pantalla o /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-edu-wallpaper-4x3-1600x1200.png o /usr/share/divert/usr/share/lubuntu/wallpapers/vitalinux-edu-wallpaper-16x9-1920x1080.png ..." >> ${LOGVX}
 	fi
 fi
 

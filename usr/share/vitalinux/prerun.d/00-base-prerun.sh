@@ -5,5 +5,5 @@
 ## 20-79: Scripts de configuración en todo arranque
 ## 80-89: Scripts que interesa que sean finales
 ## 90-99: Scripts reservados para otros usos
-export ENTCASA="FALSE"
 export _FIRST="/var/tmp/migasfree/first-tags.conf"
+export LOGVX="/var/log/vitalinux/vitalinux-general.log"

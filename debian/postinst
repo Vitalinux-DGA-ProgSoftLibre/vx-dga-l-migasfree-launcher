@@ -21,6 +21,8 @@ set -e
 case "$1" in
     configure)
 
+	# Ajustamos los permisos de Archivos y Directorios desplegados:
+
 	if ! test -d /var/tmp/migasfree ;  then
 		mkdir -p /var/tmp/migasfree
 		chmod 755 /var/tmp/migasfree
@@ -28,53 +30,28 @@ case "$1" in
 		chmod 644 /var/tmp/migasfree/first-tags.conf
 	fi
 
-	if test -d /usr/share/migasfree-launcher/prerun.d ; then
-		chmod +x /usr/share/migasfree-launcher/prerun.d/*
+	for DIRECTORIO in /usr/share/migasfree-launcher/prerun.d \
+			/usr/share/migasfree-launcher/postrun.d \
+			/usr/share/vitalinux/prerun.d \
+			/usr/share/vitalinux/postrun.d ; do
+		if test -d ${DIRECTORIO} ; then
+			chmod +x ${DIRECTORIO}/*
+		fi
+	done
+
+	for FICHERO in /usr/bin/vx-scripts-inicio \
+			/usr/bin/vx-scripts-apagado \
+			/usr/bin/vx-conf-wireless \
+			/usr/bin/vx-eliminar-wireless \
+			/usr/bin/restrictedformats ; do
+		if test -f ${FICHERO} ; then
+			chmod +x ${FICHERO}
+		fi
+	done
+
+	if test -f /usr/share/vitalinux/wireless/vx-wireless-centros ; then
+		chmod 600 /usr/share/vitalinux/wireless/vx-wireless-centros
 	fi
-
-	if test -d /usr/share/migasfree-launcher/postrun.d ; then
-		chmod +x /usr/share/migasfree-launcher/postrun.d/*
-	fi
-	if test -f /usr/bin/restrictedformats ; then
-		chmod +x /usr/bin/restrictedformats
-	fi
-
-# Comprobamos si hay una interfaz wireless en el equipo y configuramos las redes
-INTERFAZ=$(iwconfig 2> /dev/null | tr -s " " " " | cut -d" " -f1 | grep -v ^" " | sed -e "/^$/d" | head -1)
-if test "$INTERFAZ" != "" ; then
-	MIMAC=$(ifconfig ${INTERFAZ} | head -1 | tr -s " " " " | cut -d" " -f5)
-	echo "--> Se ha detectado al menos una interfaz Wireless: $INTERFAZ - $MIMAC ..."
-	echo "--> Se va ha configurar las redes Wireless disponibles de Centros Vitalinux ..."
-	if test -d /usr/share/vitalinux/wireless ; then
-		chmod 755 /usr/share/vitalinux/wireless
-		chmod -R 600 /usr/share/vitalinux/wireless/*
-		rsync -ahv --chown=root:root --chmod=600 \
-			--ignore-existing \
-			/usr/share/vitalinux/wireless/* /etc/NetworkManager/system-connections
-			##--include 'iesgallicum' --include 'iesmiguelservet' --include 'iesgudarjavalambre' --include 'carei' --exclude '*'
-	fi
-
-    for FICHERO in $(ls /etc/NetworkManager/system-connections | tr -s " " "*") ; do
-      # Por si tuviera el nombre SSID espacios en blanco:
-      NFICHERO=$(echo $FICHERO | tr -s "*" " ")
-      if test -f "/etc/NetworkManager/system-connections/${NFICHERO}" \
-        -a $(grep "mac-address" "/etc/NetworkManager/system-connections/${NFICHERO}" | wc -c) -lt 20 \
-        && grep "wireless" "/etc/NetworkManager/system-connections/${NFICHERO}" &> /dev/null ; then
-
-        if sed --follow-symlinks -i \
-        "s/mac-address=.*/mac-address=$MIMAC/g" \
-        "/etc/NetworkManager/system-connections/${NFICHERO}" ; then
-          echo "----> Se ha configurado la MAC de /etc/NetworkManager/system-connections/${NFICHERO}"
-        fi
-
-      fi
-    done
-
-    sed --follow-symlinks -i \
-      "s/FIRSTWIRELESS=.*/FIRSTWIRELESS=0/g" \
-      /etc/default/vx-dga-variables/vx-dga-variables-general.conf
-
-fi
 
 	_FILE=/etc/update-manager/release-upgrades
         dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \
@@ -88,18 +65,33 @@ fi
           dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
              --divert $_FILE.orig $_FILE
 	fi
+    # Ya no es necesario tareas-logout...todo se centraliza en vx-scripts-apagado, y se configura en skel
+	#if ! test -f /usr/bin/tareas-logout ; then
+	#	if touch /usr/bin/tareas-logout ; then
+	#		chmod +x /usr/bin/tareas-logout
+	#	fi
+	#fi
 
+	#if ! grep "/usr/bin/vx-scripts-apagado" /usr/bin/tareas-logout ; then
+	#		echo "/usr/bin/vx-scripts-apagado" >> /usr/bin/tareas-logout
+	#fi
+	
+	#if ! grep "session-cleanup-script=" /etc/lightdm/lightdm.conf &> /dev/null ; then
+	#	echo "session-cleanup-script=/usr/bin/tareas-logout" >>  /etc/lightdm/lightdm.conf
+	#else
+	#	sed -i "s#session-cleanup-script=.*#session-cleanup-script=/usr/bin/tareas-logout#g" /etc/lightdm/lightdm.conf
+	#fi
 
-# Registramos los iconos
-for DIRECTORIO in /usr/share/icons/hicolor /usr/share/vitalinux/iconos ; do
-	if test -d $DIRECTORIO ; then
-		if /usr/sbin/update-icon-caches $DIRECTORIO ; then
-			echo "--> Se han actualizado y registrado los iconos de $DIRECTORIO ..."
-		else
-			echo "--> Problemas al actualizar y registrar los iconos de $DIRECTORIO ..."
+	# Registramos los iconos
+	for DIRECTORIO in /usr/share/icons/hicolor /usr/share/vitalinux/iconos ; do
+		if test -d $DIRECTORIO ; then
+			if /usr/sbin/update-icon-caches $DIRECTORIO ; then
+				echo "--> Se han actualizado y registrado los iconos de $DIRECTORIO ..."
+			else
+				echo "--> Problemas al actualizar y registrar los iconos de $DIRECTORIO ..."
+			fi
 		fi
-	fi
-done
+	done
 
     ;;
 
