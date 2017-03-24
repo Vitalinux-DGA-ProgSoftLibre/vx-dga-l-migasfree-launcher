@@ -1,6 +1,7 @@
-vx-dga-l-migasfree-launcher (5.2-5) unstable; urgency=low
+vx-dga-l-migasfree-launcher (5.2-6) unstable; urgency=low
 
   * Se elimina la dependencia de tareas-logout. La salida se centraliza en vx-scripts-apagado, configurado en vx-dga-l-skel-usuarios
+  * Se corrige el problema con el SSID del IES Corona
 
  -- Ignacio Sancho <sannacho@gmail.com>  Tue, 4 Mar 2017 00:15:06 +0200
 
