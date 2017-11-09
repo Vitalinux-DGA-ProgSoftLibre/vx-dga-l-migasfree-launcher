@@ -5,7 +5,7 @@
 <policyconfig>
 
 <action id="migasfree.pkexec.actualizar">
-    <message>Se requiere autenticación para forzar la Actualización Migasfree:</message>
+    <message>Authentication is required to force the Migasfree Update:</message>
     <message xml:lang="es">Se requiere autenticación para forzar la Actualización Migasfree:</message>
     <icon_name>migasfree</icon_name>
     <defaults>
@@ -18,7 +18,7 @@
   </action>
 
 <action id="migasfree.pkexec.postinstalacion">
-    <message>Se requiere autenticación para volver a la post-instalación:</message>
+    <message>Authentication is required to return to post-installation:</message>
     <message xml:lang="es">Se requiere autenticación para volver a la post-instalación:</message>
     <icon_name>migasfree</icon_name>
     <defaults>
@@ -31,7 +31,7 @@
   </action>
 
 <action id="migasfree.pkexec.computername">
-    <message>Se requiere autenticación para modificar el Migasfree Computer Name:</message>
+    <message>Authentication is required to modify the Migasfree Computer Name:</message>
     <message xml:lang="es">Se requiere autenticación para modificar el Migasfree Computer Name:</message>
     <icon_name>migasfree</icon_name>
     <defaults>
@@ -44,7 +44,7 @@
   </action>
 
 <action id="migasfree.pkexec.deshabilitarmigasfree">
-    <message>Se requiere autenticación para configurar el comportamiento del cliente Migasfree:</message>
+    <message>Authentication is required to configure the Migasfree client behavior:</message>
     <message xml:lang="es">Se requiere autenticación para configurar el comportamiento del cliente Migasfree:</message>
     <icon_name>migasfree</icon_name>
     <defaults>
