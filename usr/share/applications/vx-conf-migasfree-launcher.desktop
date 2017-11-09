@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+
+Name=Enable or Disable Migasfree Client
+Name[en]=Enable or Disable Migasfree Client
+Name[es]=Habilitar o Deshabilitar Cliente Migasfree
+Name[es_ES]=Habilitar o Deshabilitar Cliente Migasfree
+
+Comment=Enables or disables the Migasfree Client as an autostart application
+Comment[en]=Enables or disables the Migasfree Client as an autostart application
+Comment[es]=Permite habilitar o deshabilitar el Cliente Migasfree como aplicación al Inicio
+Comment[es_ES]=Permite habilitar o deshabilitar el Cliente Migasfree como aplicación al Inicio
+
+Icon=migasfree
+Exec=/usr/bin/vx-pk-conf-migasfree-launcher
+Terminal=false
+Type=Application
+Categories=MigaScripts;
+StartupNotify=true
+Hidden=false

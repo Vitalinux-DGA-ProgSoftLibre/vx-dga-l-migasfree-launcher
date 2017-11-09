@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+<policyconfig>
+
+<action id="migasfree.pkexec.actualizar">
+    <message>Se requiere autenticación para forzar la Actualización Migasfree:</message>
+    <message xml:lang="es">Se requiere autenticación para forzar la Actualización Migasfree:</message>
+    <icon_name>migasfree</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-migasfree-force-upgrade</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+<action id="migasfree.pkexec.postinstalacion">
+    <message>Se requiere autenticación para volver a la post-instalación:</message>
+    <message xml:lang="es">Se requiere autenticación para volver a la post-instalación:</message>
+    <icon_name>migasfree</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-volver-a-postinstalacion</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+<action id="migasfree.pkexec.computername">
+    <message>Se requiere autenticación para modificar el Migasfree Computer Name:</message>
+    <message xml:lang="es">Se requiere autenticación para modificar el Migasfree Computer Name:</message>
+    <icon_name>migasfree</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-migasfree-computer-name</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+<action id="migasfree.pkexec.deshabilitarmigasfree">
+    <message>Se requiere autenticación para configurar el comportamiento del cliente Migasfree:</message>
+    <message xml:lang="es">Se requiere autenticación para configurar el comportamiento del cliente Migasfree:</message>
+    <icon_name>migasfree</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-conf-migasfree-launcher</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
+</policyconfig>

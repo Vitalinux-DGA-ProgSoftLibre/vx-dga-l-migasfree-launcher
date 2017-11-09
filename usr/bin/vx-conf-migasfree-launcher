@@ -1,0 +1,46 @@
+#!/bin/bash
+# Script que permite habilitar o deshabilitar el cliente Migasfree
+
+USER=$(whoami)
+
+if test $USER = "root" ; then
+
+	if yad --title "Comportamiento del Cliente Migasfree" \
+		--text "  Indica que quieres Hacer con el Cliente Migasfree ...  " \
+		--image migasfree-256x --window-icon vitalinux-256x \
+		--width="350" --height="100" --justify="center" --center --text-align="center" --timeout=10 \
+		--button="Deshabilitar Cliente Migasfree":0  --button="Habilitar Cliente Migasfree":1 ; then
+
+		/usr/bin/vx-conf-migasfree-launcher-cli "deshabilitar"
+		# El proceso anterior se ejecuta bien, pero da un error por la construccion del .desktop, por lo que se muestra directamente el 
+		# mensaje sin comprobar si ha dado o no error
+		yad --title "Comportamiento del Cliente Migasfree" \
+				--text "  Se ha deshabilitado el Cliente Migasfree  \n  Lo podrás comprobar la próxima vez que inicies sesión  " \
+				--image migasfree-256x --window-icon vitalinux-256x \
+				--width="350" --height="100" \
+				--justify="center" --center --text-align="center" \
+				--timeout=7 \
+				--button="Cerrar Ventana":0
+
+
+	elif [[ $? -eq 1 ]]; then
+
+		/usr/bin/vx-conf-migasfree-launcher-cli "habilitar"
+		# El proceso anterior se ejecuta bien, pero da un error por la construccion del .desktop, por lo que se muestra directamente el 
+		# mensaje sin comprobar si ha dado o no error
+		yad --title "Comportamiento del Cliente Migasfree" \
+				--text "  Se ha habilitado el Cliente Migasfree  \n  Lo podrás comprobar la próxima vez que inicies sesión  " \
+				--image migasfree-256x --window-icon vitalinux-256x \
+				--width="350" --height="100" \
+				--justify="center" --center --text-align="center" \
+				--timeout=7 \
+				--button="Cerrar Ventana":0
+		
+	fi
+
+else
+	yad --title "Comportamiento del Cliente Migasfree" \
+		--image migasfree-256x --window-icon vitalinux-256x \
+		--info --text "!!No tienes permisos para ejecutar este programa ...¡¡" \
+		--width="400" --height="100" --center --justify="center" --timeout=7 --text-align="center"
+fi

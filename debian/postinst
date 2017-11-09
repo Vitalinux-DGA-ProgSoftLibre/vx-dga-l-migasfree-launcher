@@ -30,28 +30,33 @@ case "$1" in
 		chmod 644 /var/tmp/migasfree/first-tags.conf
 	fi
 
+	if test -d /var/tmp/migasfree && \
+		! test -f /var/tmp/migasfree/first-tags.conf && \
+		! test -f /var/tmp/migasfree/first-tags.conf.save ; then
+		echo "" > /var/tmp/migasfree/first-tags.conf
+		chmod 644 /var/tmp/migasfree/first-tags.conf
+	fi
+
 	for DIRECTORIO in /usr/share/migasfree-launcher/prerun.d \
-			/usr/share/migasfree-launcher/postrun.d \
-			/usr/share/vitalinux/prerun.d \
-			/usr/share/vitalinux/postrun.d ; do
+			/usr/share/migasfree-launcher/postrun.d ; do
 		if test -d ${DIRECTORIO} ; then
 			chmod +x ${DIRECTORIO}/*
 		fi
 	done
 
-	for FICHERO in /usr/bin/vx-scripts-inicio \
-			/usr/bin/vx-scripts-apagado \
-			/usr/bin/vx-conf-wireless \
-			/usr/bin/vx-eliminar-wireless \
-			/usr/bin/restrictedformats ; do
+	for FICHERO in /usr/bin/restrictedformats \
+		/usr/bin/vx-conf-migasfree-launcher \
+		/usr/bin/vx-conf-migasfree-launcher-cli \
+		/usr/bin/vx-kill-cliente-migasfree \
+		/usr/bin/vx-migasfree-force-upgrade \
+		/usr/bin/vx-pk-conf-migasfree-launcher \
+		/usr/bin/vx-pk-migasfree-force-upgrade \
+		/usr/bin/vx-pk-volver-a-postinstalacion \
+		/usr/bin/vx-volver-a-postinstalacion ; do
 		if test -f ${FICHERO} ; then
 			chmod +x ${FICHERO}
 		fi
 	done
-
-	if test -f /usr/share/vitalinux/wireless/vx-wireless-centros ; then
-		chmod 600 /usr/share/vitalinux/wireless/vx-wireless-centros
-	fi
 
 	_FILE=/etc/update-manager/release-upgrades
         dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \

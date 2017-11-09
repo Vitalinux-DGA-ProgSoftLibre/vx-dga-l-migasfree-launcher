@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+
+Name=Stop and Close Migasfree Client
+Name[en]=Stop and Close Migasfree Client
+Name[es]=Detener y Cerrar Cliente Migasfree
+Name[es_ES]=Detener y Cerrar Cliente Migasfree
+
+Comment=Application that stops and closes the Migasfree Client in the current session
+Comment[en]=Application that stops and closes the Migasfree Client in the current session
+Comment[es]=Aplicación que Detiene y Cierra el Cliente Migasfree en la sesión actual
+Comment[es_ES]=Aplicación que Detiene y Cierra el Cliente Migasfree en la sesión actual
+
+Icon=matar-migasfree-512x
+Exec=/usr/bin/vx-kill-cliente-migasfree
+Terminal=false
+Type=Application
+Categories=MigaScripts;
+StartupNotify=true
+Hidden=false

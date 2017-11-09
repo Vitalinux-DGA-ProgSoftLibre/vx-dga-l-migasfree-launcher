@@ -27,7 +27,6 @@ function eliminar-usuarios-del-sistema {
        --image vitalinux \
        --width=500 \
        --button="Continuar":0
-		#sudo -u $(who | grep " :0 " | cut -d" " -f1 | sort -u) /usr/bin/users-admin
 
 
 }

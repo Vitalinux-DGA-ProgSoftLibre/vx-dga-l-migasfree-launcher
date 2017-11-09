@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Force Migasfree Upgrade
+Name[en]=Force Migasfree Upgrade
+Name[es]=Forzar Actualización contra Migasfree
+Name[es_ES]=Forzar Actualización contra Migasfree
+
+Comment=Force an update against the migasfree service
+Comment[en]=Force an update against the migasfree service
+Comment[es]=Fuerza la Actualización del Equipo contra Migasfree
+Comment[es_ES]=Fuerza la Actualización del Equipo contra Migasfree
+
+Icon=migasfree
+
+Exec=/usr/bin/vx-pk-migasfree-force-upgrade
+Terminal=false
+Type=Application
+Categories=MigaScripts;
+StartupNotify=true
+Hidden=false

@@ -1,0 +1,8 @@
+#!/bin/bash
+## Equivalente a: ps -aux | grep migasfree &> /dev/null && sudo killall migasfree-...
+
+if pgrep migasfree | xargs kill -1 ; then
+	exit 0
+else
+	exit 1
+fi

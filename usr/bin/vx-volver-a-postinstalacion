@@ -1,0 +1,43 @@
+#!/bin/bash
+USER=$(whoami)
+if test $USER = "root" ; then
+	if yad --title "Migasfree" --info --text "¿Volver a la Postinstalación?" \
+	--window-icon vitalinux \
+	--image vitalinux \
+	--width="400" --height="100" --center --justify="center" --text-align="center" \
+	--button="Si":0 --button="No":1 ; then
+
+		( if test -d /var/tmp/migasfree && test -f /var/tmp/migasfree/first-tags.conf.save ; then
+			if mv /var/tmp/migasfree/first-tags.conf.save /var/tmp/migasfree/first-tags.conf ; then
+				echo "  -->> OK: Se ha renombrado first-tags correctamente ..."
+			else
+				echo "  -->> ERROR: No se ha renombrado first-tags correctamente ..."
+			fi
+		fi
+		if test -d /root/.migasfree-keys ; then
+			if rm -Rf /root/.migasfree-keys ;  then
+				echo "  -->> OK: Se han eliminado las claves /root/.migasfree-keys ..."
+			else
+				echo "  -->> ERROR: No se han eliminado las claves /root/.migasfree-keys ..."
+			fi
+		fi
+		if test -d /var/migasfree-client/keys ; then
+			if rm -Rf /var/migasfree-client/keys/* ;  then
+				echo "  -->> OK: Se han eliminado las claves /var/migasfree-client/keys/* ..."
+			else
+				echo "  -->> ERROR: No se han eliminado las claves /var/migasfree-client/keys/* ..."
+			fi
+		fi
+		echo -e "\n  -->> En el caso en que los mensajes anteriores hayan sido OK, \nla próxima vez que inicies sesión se iniciará de nuevo la Post-Instalación \nde Vitalinux EDU"
+		) | yad --title "Migasfree" --text-info \
+		--window-icon vitalinux --tail \
+		--width="620" --height="200" --center --image vitalinux
+
+	fi
+else
+	yad --title "Migasfree" --info --text "No tiene permisos para ejecutar el programa"\
+   	--window-icon vitalinux \
+   	--image vitalinux \
+	--width="350" --height="100" --center --justify="center" --text-align="center"
+fi
+

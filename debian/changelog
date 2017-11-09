@@ -1,3 +1,17 @@
+vx-dga-l-migasfree-launcher (6.0-2) unstable; urgency=low
+
+  * Se han ajustado las politicas de polkit para el lanzamiento de aplicaciones relacionadas con el cliente Migasfree
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 2 Nov 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (6.0-1) unstable; urgency=low
+
+  * Se elimina todo lo relacionado con las wireless llevandose a un paquete nuevo llamado vx-dga-l-conf-wireless
+  * Se elimina todo lo relativo a scripts de inicio y apagado de Vitalinux llevándose a un paquete nuevo llamado vx-dga-l-scripts-inicio-apagado. Sólo quedan los scritps de inicio y apagado de Migasfree-Launcher
+  * Se añaden los scripts y desktops asociados a migasfree-launcher que antes estaban en el paquete vx-dga-l-scripts
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 2 Nov 2017 00:15:06 +0200
+
 vx-dga-l-migasfree-launcher (5.2-6) unstable; urgency=low
 
   * Se elimina la dependencia de tareas-logout. La salida se centraliza en vx-scripts-apagado, configurado en vx-dga-l-skel-usuarios

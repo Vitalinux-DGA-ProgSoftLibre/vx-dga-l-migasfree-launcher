@@ -1,0 +1,21 @@
+[Desktop Entry]
+Encoding=UTF-8
+
+Name=Modify the Migasfree Name assigned to the computer
+Name[en]=Modify the Migasfree Name assigned to the computer
+Name[es]=Modificar el Nombre Migasfree asignado al Equipo
+Name[es_ES]=Modificar el Nombre Migasfree asignado al Equipo
+
+Comment=Modify the Migasfree Name assigned to the computer
+Comment[en]=Modify the Migasfree Name assigned to the computer
+Comment[es]=Modificar el Nombre Migasfree asignado al Equipo
+Comment[es_ES]=Modificar el Nombre Migasfree asignado al Equipo
+
+Icon=migasfree
+
+Exec=/usr/bin/vx-pk-migasfree-computer-name
+Terminal=false
+Type=Application
+Categories=MigaScripts;
+StartupNotify=true
+Hidden=false

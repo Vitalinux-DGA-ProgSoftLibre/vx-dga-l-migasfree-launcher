@@ -32,6 +32,7 @@ cat >> /etc/apt/sources.list<<EOF
 deb ${_SRV}/ubuntu trusty main restricted universe multiverse
 deb ${_SRV}/ubuntu trusty-updates main restricted universe multiverse
 deb ${_SRV}/ubuntu trusty-security main restricted multiverse universe
+deb ${_SRV}/ubuntu trusty-backports main restricted multiverse universe
 
 # Libre Office 5.2 Repositorios
 deb ${_SRV}/libreoffice-5-2 trusty main
