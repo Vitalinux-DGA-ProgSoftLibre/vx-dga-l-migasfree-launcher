@@ -1,34 +1,18 @@
 #!/bin/bash
+# ASIGNAR UN COMPUTER NAME ALEATORIO.
+# En el caso de que la obtención del UUID no sea adecuada, se establece un Computer Name Aleatorio para evitar colisiones en la BD
+# Quitar Ethernet (ponerlo como opción)
 USER=$(whoami)
 
 if test $USER = "root" ; then
 
-    	if yad --title "Migasfree Computer Name" \
-    		--question \
-    		--text "  ¿Quieres asignar un nuevo Migasfree Computer Name a tu equipo?" \
-   	--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-	--width="350" --height="100" --center --justify="center" --text-align="center"
-	then
-		mac=$(ifconfig | grep Ethernet | tr -s " " "*" | cut -d"*" -f5 | head -1)
-		## rand=$(od -vAn -N4 -tu4 < /dev/random)
-		## hname=$(echo $mac $rand | tr -s " " "-")
-		## hname=$(od -vAn -N4 -tu4 < /dev/random | tr -s " " "v")
-		hname=$mac
+	mac=$(ifconfig | grep Ethernet | tr -s " " "*" | cut -d"*" -f5 | head -1)
+	## rand=$(od -vAn -N4 -tu4 < /dev/random)
+	## hname=$(echo $mac $rand | tr -s " " "-")
+	## hname=$(od -vAn -N4 -tu4 < /dev/random | tr -s " " "v")
+	hname=$mac
+	
+	sed --follow-symlinks -i "s/.*Computer_Name.*/Computer_Name=$hname/g" /etc/migasfree.conf || echo "$(date) - Error al asignar Computer Name" >> /var/log/vitalinux/computer_name
 
-		if sed --follow-symlinks -i "s/.*Computer_Name.*/Computer_Name=$hname/g" /etc/migasfree.conf ; then
-			yad  --title "Cambio de nombre" --info --text "  Se ha actualizado el valor de Computer_Name: \n $hname \n ¡¡Ahora deberías actualizarte contra Migasfree!!" \
-				--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-				--width="550" --height="200" --center --justify="center" --text-align="center"
-		else
-			yad --title "Computer Name" --info --text "  Problemas para actualizar Computer_Name ..." \
-				--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-				--width="350" --height="100" --center --justify="center" --text-align="center"
-		fi
-
-	else
-			yad --title "Computer Name" --info --text "Ha cancelado la operación" \
-				--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-				--width="350" --height="100" --center --justify="center" --text-align="center"
-    fi
   
 fi

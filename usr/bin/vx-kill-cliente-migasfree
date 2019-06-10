@@ -1,8 +1,18 @@
 #!/bin/bash
-## Equivalente a: ps -aux | grep migasfree &> /dev/null && sudo killall migasfree-...
+## Matamos a todos los procesos hijos derivados de migasfree indicator y migasfree launcher
+## para después matar a dichos procesos:
 
-if pgrep migasfree | xargs kill -1 ; then
-	exit 0
-else
-	exit 1
+USER="$(whoami)"
+[ "${USER}" != "root" ] && echo "=> Necesitas ser el root para matar los procesos ..." && exit 1
+
+if pgrep -f migasfree-indicator &> /dev/null ; then
+    sudo pkill -P $(pgrep -f migasfree-indicator)
 fi
+if pgrep -f migasfree-launcher &> /dev/null ; then
+    sudo pkill -P $(pgrep -f migasfree-launcher)
+fi
+if pgrep -f migasfree &> /dev/null ; then
+    sudo pkill -f migasfree
+fi
+
+exit 0

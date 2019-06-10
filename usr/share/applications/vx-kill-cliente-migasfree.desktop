@@ -11,8 +11,8 @@ Comment[en]=Application that stops and closes the Migasfree Client in the curren
 Comment[es]=Aplicación que Detiene y Cierra el Cliente Migasfree en la sesión actual
 Comment[es_ES]=Aplicación que Detiene y Cierra el Cliente Migasfree en la sesión actual
 
-Icon=matar-migasfree-512x
-Exec=/usr/bin/vx-kill-cliente-migasfree
+Icon=matar-migasfree
+Exec=sudo /usr/bin/vx-kill-cliente-migasfree
 Terminal=false
 Type=Application
 Categories=MigaScripts;

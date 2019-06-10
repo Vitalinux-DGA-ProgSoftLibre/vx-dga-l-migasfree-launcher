@@ -1,8 +1,55 @@
-vx-dga-l-migasfree-launcher (6.0-2) unstable; urgency=low
+vx-dga-l-migasfree-launcher (7.0-1) unstable; urgency=low
+
+  * Hacemos un divert sobre /etc/xdg/autostart/migasfree-indicator.desktop
+  * Controlamos el inicio de Migasfree con migasfree-indicator.desktop
+  * Configuramos CRON para decidir si migasfree tiene que iniciarse o no
+  * Puede configurarse para iniciarse diariamente o semanalmente
+  * Se añade la dependencia con crudini para gestionar las variables de configuración
+  * Se crea un pequeño script vx-migasfree-launcher-cron para gestionar la configuración
+  * Hacemos uso de readlink para configurar vx-conf-migasfree-launcher-cli
+
+ -- Arturo Martín <amartinromero@gmail.com>  Tue, 19 Mar 2019 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (6.1-7) unstable; urgency=low
+
+  * Corrigiendo el dpkg-configure para evitar que el GRUB no cuelge la terminal de migasfree
+  * Ficheros desktop a mismo nivel: gestion migasfree (migascripts)
+  * Se elimina el vx-pk para forzar la acutalización contra migasfree
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 27 Dec 2018 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (6.1-6) unstable; urgency=low
+
+  * Bug de firma no valida al ejecutar en prerun.d migasfree-tags -g
+  * Modificar Computer-Name pendiente hasta solucionar problemas con versiones previas de migasfree-client
+  * Upgrade a Libreoffice 6.0 como suite ofimático base
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 5 Apr 2018 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (6.1-5) unstable; urgency=low
+
+  * Fix Bug en volver a la postinstalacion (check ENT-CASA y borrado de fallas)
+
+ -- Ignacio Sancho <sannacho@gmail.com>  Thu, 12 Mar 2018 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (6.1-4) unstable; urgency=low
+
+  * Se han ajustado las opciones de salir de la post-instalación en la post-instalación
+  * Se ha elevado la versión del repositorio de libreoffice a la 5.4
+  * Se ha dado permiso vía sudo para cancelar el proceso de post-instalación
+  * Se sale de la post-instalación al deshabilitar en ENT-CASA el cliente migasfree
+  * SE ha añadido en la post-instalación el reseteo de las passwords de profesor y alumno
+
+ -- Arturo Martín <amartinromero@gmail.com>  Thu, 30 Nov 2017 00:15:06 +0200
+
+vx-dga-l-migasfree-launcher (6.1-1) unstable; urgency=low
 
   * Se han ajustado las politicas de polkit para el lanzamiento de aplicaciones relacionadas con el cliente Migasfree
+  * Se ha añadido como script de prerun.d en migasfree el migasfree-tags -g guardando la tags en /tmp/migasfree.tags
+  * Se han traido los iconos del paquete vx-dga-l-iconos que tienen que ver con migasfree
+  * El icono general de vitalinux.svg se ha llevado al paquete vx-dga-l-iconos
 
- -- Arturo Martín <amartinromero@gmail.com>  Thu, 2 Nov 2017 00:15:06 +0200
+ -- Arturo Martín <amartinromero@gmail.com>  Mon, 27 Nov 2017 00:15:06 +0200
 
 vx-dga-l-migasfree-launcher (6.0-1) unstable; urgency=low
 

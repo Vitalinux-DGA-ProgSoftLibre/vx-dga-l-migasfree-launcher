@@ -20,8 +20,13 @@ set -e
 case "$1" in
     remove)
         _FILE=/etc/update-manager/release-upgrades
-          [ -L $_FILE ] && rm $_FILE
-          dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
+        [ -L $_FILE ] && rm $_FILE
+        dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
+             --divert $_FILE.orig $_FILE
+
+        _FILE=/etc/xdg/autostart/migasfree-indicator.desktop
+        [ -L $_FILE ] && rm $_FILE
+        dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
              --divert $_FILE.orig $_FILE
 
 	if dpkg-divert --list | grep /usr/bin/migasfree-launcher &> /dev/null ; then

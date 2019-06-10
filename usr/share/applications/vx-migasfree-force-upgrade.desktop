@@ -12,7 +12,7 @@ Comment[es_ES]=Fuerza la Actualización del Equipo contra Migasfree
 
 Icon=migasfree
 
-Exec=/usr/bin/vx-pk-migasfree-force-upgrade
+Exec=sudo /usr/bin/vx-migasfree-force-upgrade
 Terminal=false
 Type=Application
 Categories=MigaScripts;

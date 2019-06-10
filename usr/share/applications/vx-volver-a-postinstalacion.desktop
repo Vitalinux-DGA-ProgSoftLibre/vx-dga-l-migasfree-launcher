@@ -16,6 +16,6 @@ Icon=vx-volver
 Exec=/usr/bin/vx-pk-volver-a-postinstalacion
 Terminal=false
 Type=Application
-Categories=Etiquetas;
+Categories=MigaScripts;
 StartupNotify=true
 Hidden=false

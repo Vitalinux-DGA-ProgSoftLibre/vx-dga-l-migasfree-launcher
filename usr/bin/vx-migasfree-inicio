@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# [arturo@2019-3-29]
+# Evitamos que se inicie Migasfree cuando no deseamos, permitiendo simpre el force upgrade
+
+FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron.conf"
+# Comprobamos si Migasfree Launcher debe lanzarse en este inicio de sesión para
+# continuar con el arranque normal de Migasfree o matar el proceso
+MIGASFREE="$(crudini --get "${FICHCONFCRON}" "Configuration" "MIGASFREE")"
+
+# Si MIGASFREE=1 actualizaremos contra Migasfree, en caso contrario son los scripts
+if (( MIGASFREE == 1 )) ; then
+    migasfree-indicator --interval 24
+else
+    sudo vx-scripts-inicio-migasfree
+    sudo vx-scripts-apagado-migasfree
+fi
+

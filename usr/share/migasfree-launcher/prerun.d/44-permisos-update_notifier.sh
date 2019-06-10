@@ -1,3 +1,4 @@
+#!/bin/bash
 # block update-notifier
 
 if test -f /etc/xdg/autostart/update-notifier.desktop -a $(stat -c%a /etc/xdg/autostart/update-notifier.desktop) -ne 0 ; then

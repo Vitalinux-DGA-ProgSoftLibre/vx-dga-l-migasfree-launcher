@@ -1,0 +1,13 @@
+#!/bin/bash
+
+FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron.conf"
+
+# 1) Comprobamos en FICHCONFCRON si esta programada una frecuencia de "0" o "7":
+# La frecuencia puede ser: 0:daily_every_sessions|7:daily|1:weekly
+FRECUENCY="$(crudini --get "${FICHCONFCRON}" "Configuration" "FRECUENCY")"
+
+# 2) Si la FRECUENCY es diaria "0-7", habilitaremos con "1" la variable que inicia MIGASFREE:
+if (( FRECUENCY == 0 )) || (( FRECUENCY == 7 )) ; then
+    crudini --set "${FICHCONFCRON}" "Configuration" "MIGASFREE" "1"
+fi
+

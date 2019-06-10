@@ -1,0 +1,36 @@
+#!/bin/bash
+
+USER=$(whoami)
+if test "${USER}" = "root" ; then
+	TEXTO="\n<b><span foreground='red'>¡¡Se ha cancelado el proceso de Post-Instalación!!</span></b>\n\n"
+	TEXTO="${TEXTO}Te informamos que <b>la próxima vez que inicies una nueva sesión gráfica</b>\nvolverá a lanzarse el proceso de Post-Instalación.\n"
+	TEXTO="${TEXTO}\nEl proceso de <b>Post-Instalación</b> es necesario \npara poder <b>personalizar e identificar</b> tu equipo Vitalinux"
+	yad --title "Migasfree" \
+	--info \
+	--text "${TEXTO}" \
+   	--window-icon vitalinux \
+   	--image vitalinux \
+   	--fixed \
+	--width 600 \
+	--height 200 \
+	--center \
+	--justify="center" \
+	--text-align="center" \
+	--buttons-layout="center" \
+	--button="Entendido":0
+	vx-kill-cliente-migasfree
+	exit 0
+else
+	yad --title "Migasfree" \
+	--info \
+	--text "No tiene permisos para ejecutar el programa" \
+   	--window-icon vitalinux \
+   	--image vitalinux \
+	--width="350" --height="100" \
+	--center \
+	--justify="center" \
+	--text-align="center" \
+	--button="Cerrar":1
+	exit 1
+fi
+

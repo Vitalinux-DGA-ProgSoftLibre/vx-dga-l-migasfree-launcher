@@ -1,54 +1,109 @@
 #!/bin/bash
-USER=$(whoami)
 
-function actualizar-contra-migasfree {
+function close_yad(){
+    kill -s SIGUSR1 "$YAD_PID"
+}
+export -f close_yad
 
-(
-	echo "--> Va a empezar la actualización contra Migasfree ..."
-	echo "--> ¡¡No cierres la ventana!! Espera a que se te indique ..."
-	echo "..."
-	echo ""
-	
-	#migasfree -u | sed -r 's/'$(echo -e "\033")'\[[0-9]{1,2}(;([0-9]{1,2})?)?[mK]//g'
-	migasfree-launcher force-upgrade | sed -r 's/'$(echo -e "\033")'\[[0-9]{1,2}(;([0-9]{1,2})?)?[mK]//g'
-
-	yad --title "Actualización Terminada" \
-		 --text "   <b>Actualización contra Migasfree terminada ...</b>   \n\n   Compruebe el resultado de la comunicación mostrado anteriormente ... \n Si no ha detectado errores debería estar todo correcto ...   \n\n   <b>¡¡Ya puedes cerrar la ventana anterior!!</b>" \
-		--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-		--image migasfree \
-		--width="600" --height="100" \
-		--center --justify="center" --text-align="center" --button=Terminar:0
-
-	echo -e "\n..."
-	echo "--> Ya puedes cerrar la ventana ..."
-	) | yad --title "Actualización contra Migasfree" \
-		--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-		--image migasfree \
-		--text-info --text-align="center" \
-		--text "A continuación comenzará la actualización contra Migasfree: \n <b>¡¡No cierres la ventana hasta que no se te indique!!</b>" \
-		--tail \
-		--width="750" --height="420" --center --button "Cerrar Ventana":0
-
+function log_xsession(){
+    #
+    # Funcion que loguea el proceso. Si no se pasa como parámetro el nombre del fichero, dejará un log en /tmp
+    # Si se quiere loguera en /var/log/vitalinux se llamará como log_xsession -o nombre_fichero
+    #
+    while getopts 'o:' OPT; do
+        case $OPT in
+            o) LOGFILE=$OPTARG;;
+        esac
+    done
+    
+    if [ "$LOGFILE" ] ; then
+        if [ ! -d /var/log/vitalinux ]; then
+            mkdir -p /var/log/vitalinux
+        fi
+        LOGFILE="/var/log/vitalinux/$LOGFILE"
+    else
+        LOGFILE="/tmp/logfile"
+    fi
+    export fpipe=$(mktemp -u --tmpdir yadlog.XXXXXXXX)
+    mkfifo "$fpipe"
+    exec 3<> "$fpipe"
+    exec 2>&1
+    exec > >(tee -i "$fpipe" >> "$LOGFILE" )
+    # Borramos la pipe cuando salgamos
+    trap "rm -f $fpipe" EXIT
+    yad --title "Actualización contra Migasfree" --text-info --tail \
+    --window-icon vitalinux \
+    --center --width="720" --height="520" \
+    --no-escape --no-focus --button="Ocultar:bash -c close_yad" \
+    --button="Terminar:bash -c close_exit" < "$fpipe" &
+    
+    YAD_LOG=$!
+    export YAD_LOG
 }
 
-if test $USER = "root" ; then
+function close_exit(){
+    echo "Se cancela el proceso por parte del usuario antes de tiempo"
+    if [ -n "$YAD_LOG" ] && ps -p "$YAD_LOG" > /dev/null; then
+        echo "Matando $YAD_LOG y mataremos a $YAD_PID"
+        kill -s SIGUSR1 "$YAD_LOG"
+    fi
+    if [ -n "$YAD_PID" ] && ps -p "$YAD_PID" > /dev/null; then
+        echo "Matando $YAD_PID"
+        kill -s SIGUSR1 "$YAD_PID"
+    fi
+    echo "Y por si acaso..."
+    if pgrep -f migasfree-launcher &> /dev/null ; then
+        sudo pkill -P $(pgrep -f migasfree-launcher)
+    fi
+    if pgrep -f migasfree &> /dev/null ; then
+        sudo pkill -P $(pgrep -f "migasfree .*")
+    fi
+    # Salimos del programa
+    echo "Saliendo...."
+    exit 0
+}
+export -f close_exit
 
-	if yad --title "Actualización contra Migasfree" \
-		--info \
-		--text "¿Deseas que tu equipo Vitalinux se comunique con Migasfree \n y actualice el estado de su Software?" \
-		--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-		--image migasfree \
-		--width="500" --height="100" \
-		--center --justify="center" --text-align="center" \
-		--button "Actualización Migasfree":0 --button "Salir":1 ; then
 
-		actualizar-contra-migasfree
+function actualizar-contra-migasfree {
+    
+    
+    echo "--> Va a empezar la actualización contra Migasfree ..."
+    echo "--> ¡¡No cierres la ventana!! Espera a que se te indique ..."
+    echo "..."
+    echo ""
+    
+    #migasfree -u | sed -r 's/'$(echo -e "\033")'\[[0-9]{1,2}(;([0-9]{1,2})?)?[mK]//g'
+    migasfree-launcher force-upgrade | sed -r -u 's/'$(echo -e "\033")'\[[0-9]{1,2}(;([0-9]{1,2})?)?[mK]//g'
+    
+    yad --title "Actualización Terminada" \
+    --text "   <b>Actualización contra Migasfree terminada ...</b>   \n\n   Compruebe el resultado de la comunicación mostrado anteriormente ... \n Si no ha detectado errores debería estar todo correcto ...   \n\n   <b>¡¡Ya puedes cerrar la ventana anterior!!</b>" \
+    --window-icon vitalinux \
+    --image migasfree \
+    --width="600" --height="100" \
+    --fixed \
+    --center --justify="center" --text-align="center" --button=Terminar:0
+    
+    echo -e "\n..."
+    echo "--> Ya puedes cerrar la ventana ..."
+}
 
-	fi
+FICHFUNCS="/usr/bin/vx-funcs-bash"
+[ -f "${FICHFUNCS}" ] && . "${FICHFUNCS}"
 
+# Chequeamos que es el usuario "Root" quien ejecuta la llamada al script
+vx-check_user_root
+
+FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron.conf"
+crudini --set "${FICHCONFCRON}" "Configuration" "FORCEMIGAS" "1"
+
+if vx-detectar_gui ; then
+    log_xsession -o "vx-force-upgrade-migasfree.log"
+    actualizar-contra-migasfree
 else
-		yad --title "Migasfree" --info --text "No tiene permisos para ejecutar el programa"\
-	   	--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
-		--width="350" --height="100" --center --justify="center" --text-align="center"
+    migasfree-launcher force-upgrade
 fi
 
+crudini --set "${FICHCONFCRON}" "Configuration" "FORCEMIGAS" "0"
+## Por último cerramos la ventana de Actualización en el caso de que el usuario no lo haga:
+sleep 15 && close_exit

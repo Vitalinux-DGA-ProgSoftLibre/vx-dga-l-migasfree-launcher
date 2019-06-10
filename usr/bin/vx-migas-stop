@@ -1,0 +1,15 @@
+#!/bin/bash
+
+FICHFUNCS="/usr/bin/vx-funcs-bash"
+[ -f "${FICHFUNCS}" ] && . "${FICHFUNCS}" && \
+MILOG="vx-estado-migasfree-en-apagado.log" && \
+log_xsession -o "${MILOG}"
+
+# Comprobamos si el servicio vx-migas-start sigue corriendo y esperamos a que termine para salir:
+NAME="vx-migas-start"
+## while pgrep -f "vx-migas-start" >& /dev/null ; do
+while /sbin/start-stop-daemon --status --name "${NAME}" ; do
+    echo "$(date) - Migasfree se esta actualizando ... Esperaremos a que termine!!"
+    sleep 3
+done
+exit 0

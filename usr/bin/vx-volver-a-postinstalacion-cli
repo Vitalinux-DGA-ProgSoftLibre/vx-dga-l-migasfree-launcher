@@ -1,0 +1,134 @@
+#!/bin/bash
+
+USER=$(whoami)
+if test "${USER}" != "root" ; then
+	echo "=> Problema: Necesitas permisos de administración para volver a la post-instalación ..."
+	exit 1
+fi
+
+function log_xsession(){
+#
+# Funcion que audita el proceso. Si no se pasa como parámetro el nombre del fichero, dejará un log en /tmp
+# Se auditará en /var/log/vitalinux en el archivo indicado: log_xsession -o nombre_fichero
+# 
+	while getopts 'o:' OPT; do
+        case ${OPT} in
+            o) LOGFILE=${OPTARG};;
+        esac
+	done
+
+	if [ "${LOGFILE}" ] ; then
+		if [ ! -d /var/log/vitalinux ]; then
+			mkdir -p /var/log/vitalinux
+		fi
+		LOGFILE="/var/log/vitalinux/${LOGFILE}"
+	else
+		LOGFILE="/tmp/logfile.volver-a-postinstalacion.log"
+	fi
+	
+	exec > >(tee -i "${LOGFILE}" )
+	#exec 2>&1
+}
+
+log_xsession -o vx-volver-a-postinstalacion.log
+
+# Tomamos las etiquetas actiuales 
+if [ -f /tmp/migasfree.tags ]; then
+	ETIQUETAS=$(cat /tmp/migasfree.tags)
+else
+	ETIQUETAS="$(migasfree-tags -g)"
+fi
+
+
+# Regeneramos el archivo first-tags.conf
+if test -d /var/tmp/migasfree && test -f /var/tmp/migasfree/first-tags.conf.save ; then
+	if mv /var/tmp/migasfree/first-tags.conf.save /var/tmp/migasfree/first-tags.conf ; then
+		echo "  -->> OK: Se ha renombrado first-tags correctamente ..."
+	else
+		echo "  -->> ERROR: No se ha renombrado first-tags correctamente ..."
+	fi
+fi
+
+# Eliminamos la claves de comunicación del cliente con el servidor Migasfree
+for DIR in "/root/.migasfree-keys" ; do
+	if test -d "${DIR}" ; then
+		if rm -Rf "${DIR}" ;  then
+			echo "  -->> OK: Se han eliminado las claves \"${DIR}\" ..."
+		else
+			echo "  -->> ERROR: No se han eliminado las claves \"${DIR}\" ..."
+		fi
+	fi
+done
+
+DIR="/var/migasfree-client/keys"
+if test -d "${DIR}" ; then
+	if rm -Rf /var/migasfree-client/keys/* ;  then
+		echo "  -->> OK: Se han eliminado las claves \"${DIR}\" ..."
+	else
+		echo "  -->> ERROR: No se han eliminado las claves \"${DIR}\" ..."
+	fi
+fi
+
+# Purgamos las variables de entorno usadas por Vitalinux (entre las dos líneas con #)
+FICH="/etc/default/vx-dga-variables/vx-dga-variables-general.conf"
+POS1=$(expr $(grep -n "^#" "${FICH}" \
+	| cut -d":" -f1 | tr -s "\n" "," | cut -d"," -f1) + 1)
+POS2=$(expr $(grep -n "^#" "${FICH}" \
+	| cut -d":" -f1 | tr -s "\n" "," | cut -d"," -f2) - 1)
+if test ${POS1} -le ${POS2} ; then 
+	if sed -i "${POS1},${POS2}d" "${FICH}" ; then
+		echo "-->> OK: Se han reseteado las variables de entorno de Vitalinux ..."
+	else
+		echo "-->> ERROR: No se han podido resetear las variables de entorno de Vitalinux ..."
+	fi
+else
+	echo "-->> Se dejan como estan las variables de entorno de Vitalinux"
+fi
+
+echo "-->> Ahora se va a tratar de eliminar los archivos de personalización de los usuarios:"
+/usr/bin/vx-eliminar-ficheros-conf-personales
+
+# Regeneramos las passwords de los usuarios base: profesor, dga y alumno si no es equipo de CASA
+if ( ! ( echo "$ETIQUETAS" | grep ENT-CASA ) ) ; then
+	if ! ( getent passwd | grep ^profesor: &> /dev/null ) ; then
+		if useradd -m -d /home/profesor -c "Profesor Centro" \
+			-u 1100 -G adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare \
+			-s /bin/bash -p $(printf "careidga" | mkpasswd -s -m sha-512) profesor ; then
+			echo "--> Se ha creado la cuenta de usuario con uid 1100: profesor"
+		fi
+	else
+		if usermod -u 1100 -aG adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare \
+			-c "Profesor Centro" \
+			-s /bin/bash -p $(printf "careidga" | mkpasswd -s -m sha-512) profesor ; then
+			echo "--> Se ha modificado correctamente la cuenta de usuario Profesor: Profesor Centro"
+		fi
+	fi
+
+	if ! ( getent passwd | grep ^dga: &> /dev/null ) ; then
+		if useradd -m -d /home/dga -c "Usuario DGA Vitalinux" \
+			-u 1000 -G adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare \
+			-s /bin/bash -p $(printf "careidga" | mkpasswd -s -m sha-512) dga ; then
+			echo "--> Se ha creado la cuenta de usuario con uid 1000: dga"
+		fi
+	else
+		if usermod -u 1000 -aG adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare \
+			-c "Usuario DGA Vitalinux" \
+			-s /bin/bash -p $(printf "careidga" | mkpasswd -s -m sha-512) dga ; then
+			echo "--> Se ha modificado correctamente la cuenta de usuario dga: Usuario DGA Vitalinux"
+		fi
+	fi
+
+	if ! ( getent passwd | grep ^alumno: &> /dev/null ) ; then
+		if useradd -m -d /home/alumno -c "Alumno Centro" \
+			-u 1200 -s /bin/bash -p $(printf "alumno" | mkpasswd -s -m sha-512) alumno ; then
+			echo "--> Se ha creado la cuenta de usuario con uid 1200: alumno"
+		fi
+	else
+		if usermod -u 1200 -c "Alumno Centro" \
+			-s /bin/bash -p $(printf "alumno" | mkpasswd -s -m sha-512) alumno ; then
+			echo "--> Se ha modificado correctamente la cuenta de usuario Alumno: Alumno Centro"
+		fi
+	fi
+fi
+
+echo -e "\n  -->> En el caso en que los mensajes anteriores hayan sido OK, \nla próxima vez que inicies sesión se iniciará de nuevo la Post-Instalación \nde Vitalinux EDU"

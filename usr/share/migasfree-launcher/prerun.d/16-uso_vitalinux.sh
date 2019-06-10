@@ -14,8 +14,8 @@ if [ -f $_FIRST ] ; then
 		--column Numero:HD \
 		TRUE "Voy a usar Vitalinux asociado a un Centro Educativo" "1" \
 		FALSE "Voy a usar Vitalinux en casa, o fuera de un centro Educativo" "2" \
-		--button="Salir de la Post-Instalación":1 \
 		--button="Continuar con la Post-Instalación":0 \
+		--button="Salir de la Post-Instalación":1 \
 		--buttons-layout center) ; then
 
 		OPCION=$(echo $RESULTADO | cut -d"|" -f3)
@@ -40,7 +40,8 @@ if [ -f $_FIRST ] ; then
 		esac
 
 	else
-		vx-matar-cliente-migasfree
+		# Cancelamos el proceso de post-instalación:
+		vx-cancelar-postinstalacion
 	fi
 
 fi

@@ -24,7 +24,7 @@ function eliminar-usuarios-del-sistema {
        --text "$TEXTO" \
        --text-align center \
        --window-icon vitalinux \
-       --image vitalinux \
+       --image usuario \
        --width=500 \
        --button="Continuar":0
 
@@ -63,8 +63,8 @@ function crear-usuario {
 	TEXTO="$1"
 
 	if DATOS=$(yad --center --width 400 \
-	--window-icon vitalinux-64x \
-	--image usuario-64x \
+	--window-icon vitalinux \
+	--image usuario \
 	--title "Inicio de Sesión Automático" \
 	--text-align center --justify="center" \
 	--text "$TEXTO" \
@@ -88,10 +88,10 @@ function crear-usuario {
 			-c "$NOMBRE - $COMENTARIO" $NOMBRE ; then
 
 			if yad --center --width 500 \
-				--window-icon vitalinux-64x \
+				--window-icon vitalinux \
 				--title "Inicio de Sesión Automático" \
 				--text-align center \
-				--image usuario-64x \
+				--image usuario \
 				--text "   ¿¿Te gustaría que el usuario <b>$NOMBRE</b>   \n    fuera <b>administrador</b> del equipo??   " \
 				--button="Si, <b>$NOMBRE</b> Administrador":0 --button="No":1 ; then
 				/usr/sbin/usermod -aG adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare $NOMBRE
@@ -101,10 +101,10 @@ function crear-usuario {
 		else
 
 			yad --center --width 500 \
-			--window-icon=/usr/share/lxpanel/images/vitalinux.svg \
+			--window-icon vitalinux \
 			--title "Inicio de Sesión Automático" \
 			--text-align center \
-			--image=/usr/share/lxpanel/images/usuario.png \
+			--image usuario \
 			--text "  Error al crear la cuenta de Usuario ...\n\n  <b>¡¡El nombre no es válido o las contraseñas no coinciden!!</b>" \
 			--button="Volver a Crear Usuario":0
 
@@ -126,11 +126,12 @@ A lo hora de crear un nuevo usuario recuerda tener en cuenta lo siguiente: \n\n\
 
 function decidir-usuario-inicio-sesion {
 	MENSAJE="$1"
-	if USUARIO=$(yad --center --width 500 \
-	--window-icon vitalinux-64x \
+	
+	USUARIO=$(yad --center --width 500 \
+	--window-icon vitalinux \
 	--title "Inicio de Sesión Automático" \
 	--text-align center \
-	--image usuario-64x \
+	--image usuario \
 	--entry \
 	--text "$MENSAJE" \
 	--entry-text \
@@ -138,8 +139,13 @@ function decidir-usuario-inicio-sesion {
 	"Usuario Nuevo a Crear" \
 	$(awk -F ":" '{if ( $3 > 999 && $6~/\/home\/.*/) {print $1}}' /etc/passwd) \
 	"Usuario LDAP" \
-	--button="Confirmar Selección:0") ; then
+	--button="Confirmar Selección:0" \
+	--button="Saltar Paso":1 \
+	--button="Salir de la Post-Instalación":2 \
+	--buttons-layout center)
 
+	case "${?}" in
+		0)
 		if test "$USUARIO" == "Usuario Nuevo a Crear" ; then
 			TEXTO="  ¡¡Ok!! Vamos a <b>crear un nuevo usuario</b> en Vitalinux  \n\n\
 	  Usuarios Existentes: <b>$USUARIOSEXISTENTES</b> \n\n\
@@ -156,7 +162,16 @@ function decidir-usuario-inicio-sesion {
 		else
 			configurar-usuario-inicio-automatico-lightdm "$USUARIO"
 		fi	
-	fi
+		;;
+		1)
+		echo "=> Se deja el usuario de inicio de sesión que haya configurado ..."
+		;;
+		*)
+			# Cancelamos el proceso de post-instalación:
+			vx-cancelar-postinstalacion
+			exit 0
+		;;
+	esac
 }
 
 if [ -f $_FIRST ] ; then

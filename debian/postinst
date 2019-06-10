@@ -20,89 +20,148 @@ set -e
 
 case "$1" in
     configure)
-
-	# Ajustamos los permisos de Archivos y Directorios desplegados:
-
-	if ! test -d /var/tmp/migasfree ;  then
-		mkdir -p /var/tmp/migasfree
-		chmod 755 /var/tmp/migasfree
-		echo "" > /var/tmp/migasfree/first-tags.conf
-		chmod 644 /var/tmp/migasfree/first-tags.conf
-	fi
-
-	if test -d /var/tmp/migasfree && \
-		! test -f /var/tmp/migasfree/first-tags.conf && \
-		! test -f /var/tmp/migasfree/first-tags.conf.save ; then
-		echo "" > /var/tmp/migasfree/first-tags.conf
-		chmod 644 /var/tmp/migasfree/first-tags.conf
-	fi
-
-	for DIRECTORIO in /usr/share/migasfree-launcher/prerun.d \
-			/usr/share/migasfree-launcher/postrun.d ; do
-		if test -d ${DIRECTORIO} ; then
-			chmod +x ${DIRECTORIO}/*
-		fi
-	done
-
-	for FICHERO in /usr/bin/restrictedformats \
-		/usr/bin/vx-conf-migasfree-launcher \
-		/usr/bin/vx-conf-migasfree-launcher-cli \
-		/usr/bin/vx-kill-cliente-migasfree \
-		/usr/bin/vx-migasfree-force-upgrade \
-		/usr/bin/vx-pk-conf-migasfree-launcher \
-		/usr/bin/vx-pk-migasfree-force-upgrade \
-		/usr/bin/vx-pk-volver-a-postinstalacion \
-		/usr/bin/vx-volver-a-postinstalacion ; do
-		if test -f ${FICHERO} ; then
-			chmod +x ${FICHERO}
-		fi
-	done
-
-	_FILE=/etc/update-manager/release-upgrades
+        
+        # Ajustamos los permisos de Archivos y Directorios desplegados:
+        
+        if ! test -d /var/tmp/migasfree ;  then
+            mkdir -p /var/tmp/migasfree
+            chmod 755 /var/tmp/migasfree
+            echo "" > /var/tmp/migasfree/first-tags.conf
+            chmod 644 /var/tmp/migasfree/first-tags.conf
+        fi
+        
+        if test -d /var/tmp/migasfree && \
+        ! test -f /var/tmp/migasfree/first-tags.conf && \
+        ! test -f /var/tmp/migasfree/first-tags.conf.save ; then
+            echo "" > /var/tmp/migasfree/first-tags.conf
+            chmod 644 /var/tmp/migasfree/first-tags.conf
+        fi
+        
+        for DIRECTORIO in /usr/share/migasfree-launcher/prerun.d \
+        /usr/share/migasfree-launcher/postrun.d ; do
+            if test -d ${DIRECTORIO} ; then
+                chmod +x ${DIRECTORIO}/*
+            fi
+        done
+        
+        # Damos permiso de ejecución a los scripts de /usr/bin:
+        for FICHERO in vx-cancelar-postinstalacion \
+        vx-conf-migasfree-launcher \
+        vx-conf-migasfree-launcher-cli \
+        vx-kill-cliente-migasfree \
+        vx-migas-start \
+        vx-migas-stop \
+        vx-migasfree-computer-name \
+        vx-migasfree-force-upgrade \
+        vx-migasfree-inicio \
+        vx-migasfree-launcher \
+        vx-migasfree-launcher-conf-cron \
+        vx-pk-conf-migasfree-launcher \
+        vx-pk-volver-a-postinstalacion \
+        vx-scripts-apagado-migasfree \
+        vx-scripts-inicio-migasfree \
+        vx-volver-a-postinstalacion \
+        vx-volver-a-postinstalacion-cli ; do
+            [ -f "/usr/bin/${FICHERO}" ] && chmod +x "/usr/bin/${FICHERO}" && \
+            echo "=> Se ha dado permiso de ejecución a ${FICHERO} ..."
+        done
+        
+        # Permiso de ejecución al script que controla la parada del servicio migasfree:
+        FICHERO="/etc/init.d/vx-migas-stop"
+        [ -f "${FICHERO}"] && chmod +x "${FICHERO}" && \
+        echo "=> Se ha dado permiso de ejecución a ${FICHERO} ..."
+        
+        # Damos permiso al script divertido de migasfree-launcher:
+        FICHERO="/usr/share/divert/usr/bin/migasfree-launcher"
+        [ -f "${FICHERO}"] && chmod +x "${FICHERO}" && \
+        echo "=> Se ha dado permiso de ejecución a ${FICHERO} ..."
+        
+        # Damos permiso de ejecución a las tareas del crontab:
+        for FICHERO in "/etc/cron.daily/vx-migasfee-launcher_daily" \
+        "/etc/cron.weekly/vx-migasfee-launcher_weekly" ; do
+            [ -f "${FICHERO}" ] && chmod +x "${FICHERO}"
+        done
+        
+        _FILE=/etc/update-manager/release-upgrades
         dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \
-           --divert $_FILE.orig $_FILE
+        --divert $_FILE.orig $_FILE
         [ ! -e $_FILE -o -L $_FILE ] && \
-           ln -sf /usr/share/divert$_FILE $_FILE
-
-	if dpkg-divert --list | grep /usr/bin/migasfree-launcher &> /dev/null ; then
-	_FILE=/usr/bin/migasfree-launcher
-          [ -L $_FILE ] && rm $_FILE
-          dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
-             --divert $_FILE.orig $_FILE
-	fi
-    # Ya no es necesario tareas-logout...todo se centraliza en vx-scripts-apagado, y se configura en skel
-	#if ! test -f /usr/bin/tareas-logout ; then
-	#	if touch /usr/bin/tareas-logout ; then
-	#		chmod +x /usr/bin/tareas-logout
-	#	fi
-	#fi
-
-	#if ! grep "/usr/bin/vx-scripts-apagado" /usr/bin/tareas-logout ; then
-	#		echo "/usr/bin/vx-scripts-apagado" >> /usr/bin/tareas-logout
-	#fi
-	
-	#if ! grep "session-cleanup-script=" /etc/lightdm/lightdm.conf &> /dev/null ; then
-	#	echo "session-cleanup-script=/usr/bin/tareas-logout" >>  /etc/lightdm/lightdm.conf
-	#else
-	#	sed -i "s#session-cleanup-script=.*#session-cleanup-script=/usr/bin/tareas-logout#g" /etc/lightdm/lightdm.conf
-	#fi
-
-	# Registramos los iconos
-	for DIRECTORIO in /usr/share/icons/hicolor /usr/share/vitalinux/iconos ; do
-		if test -d $DIRECTORIO ; then
-			if /usr/sbin/update-icon-caches $DIRECTORIO ; then
-				echo "--> Se han actualizado y registrado los iconos de $DIRECTORIO ..."
-			else
-				echo "--> Problemas al actualizar y registrar los iconos de $DIRECTORIO ..."
-			fi
-		fi
-	done
-
+        ln -sf /usr/share/divert$_FILE $_FILE
+        
+        _FILE=/etc/xdg/autostart/migasfree-indicator.desktop
+        dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \
+        --divert $_FILE.orig $_FILE
+        [ ! -e $_FILE -o -L $_FILE ] && \
+        ln -sf /usr/share/divert$_FILE $_FILE
+        
+        # Divert del script de migasfree-launcher:
+        if dpkg-divert --list | grep /usr/bin/migasfree-launcher &> /dev/null ; then
+            _FILE=/usr/bin/migasfree-launcher
+            [ -L $_FILE ] && rm $_FILE
+            dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
+            --divert $_FILE.orig $_FILE
+        fi
+        
+        _FILE=/usr/bin/migasfree-launcher
+        dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \
+        --divert $_FILE.orig $_FILE
+        [ ! -e $_FILE -o -L $_FILE ] && \
+        ln -sf /usr/share/divert$_FILE $_FILE
+        
+        # Ya no es necesario tareas-logout...todo se centraliza en vx-scripts-apagado, y se configura en skel
+        #if ! test -f /usr/bin/tareas-logout ; then
+        #	if touch /usr/bin/tareas-logout ; then
+        #		chmod +x /usr/bin/tareas-logout
+        #	fi
+        #fi
+        
+        #if ! grep "/usr/bin/vx-scripts-apagado" /usr/bin/tareas-logout ; then
+        #		echo "/usr/bin/vx-scripts-apagado" >> /usr/bin/tareas-logout
+        #fi
+        
+        #if ! grep "session-cleanup-script=" /etc/lightdm/lightdm.conf &> /dev/null ; then
+        #	echo "session-cleanup-script=/usr/bin/tareas-logout" >>  /etc/lightdm/lightdm.conf
+        #else
+        #	sed -i "s#session-cleanup-script=.*#session-cleanup-script=/usr/bin/tareas-logout#g" /etc/lightdm/lightdm.conf
+        #fi
+        
+        # Registramos los iconos
+        for DIRECTORIO in /usr/share/icons/hicolor /usr/share/vitalinux/iconos ; do
+            if test -d $DIRECTORIO ; then
+                if /usr/sbin/update-icon-caches $DIRECTORIO ; then
+                    echo "=> Se han actualizado y registrado los iconos de $DIRECTORIO ..."
+                else
+                    echo "=> Problemas al actualizar y registrar los iconos de $DIRECTORIO ..."
+                fi
+            fi
+        done
+        
+        # Inicializamos en caso de ser necesario el fichero de variables del cron:
+        FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron.conf"
+        if [ ! -f "${FICHCONFCRON}" ] ; then
+		cat > "${FICHCONFCRON}"<<EOF
+[Configuration]
+# La frecuencia puede ser: 0:daily_every_sessions|7:daily|1:weekly
+FRECUENCY=7
+# Le indica a migasfree si tiene que actuar o no. Lo modifica el script de postmigasfree
+MIGASFREE=1
+# Permitimos el Force Upgrade de Migasfree
+FORCEMIGAS=1
+# Permitimos ejecutar los scripts de inicio de migasfree siempre:
+ALLPRESCRIPTSMIGASFREE=1
+# Permitimos ejecutar los scripts de apagado de migasfree siempre:
+ALLPOSTSCRIPTSMIGASFREE=1
+# Permitimos ejecutar determinados scripts de inicio de migasfree siempre:
+SOMEPRESCRIPTSMIGASFREE=1
+# Permitimos ejecutar determinados scripts de apagado de migasfree siempre:
+SOMEPOSTSCRIPTSMIGASFREE=1
+EOF
+        fi
     ;;
-
+    
     abort-upgrade|abort-remove|abort-deconfigure)
     ;;
-
+    
     *)
         echo "postinst called with unknown argument \`$1'" >&2
         exit 1

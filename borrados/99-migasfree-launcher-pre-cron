@@ -1,0 +1,10 @@
+#!/bin/bash
+
+FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron"
+# Comprobamos si Migasfree Launcher debe lanzarse en este inicio de sesión para
+# continuar con el arranque normal de Migasfree o matar el proceso
+MIGASFREE="$(crudini --get "${FICHCONFCRON}" "Configuration" "MIGASFREE")"
+
+FORCEMIGAS="$(crudini --get "${FICHCONFCRON}" "Configuration" "FORCEMIGAS")"
+# Si MIGASFREE es 0 matamos el proceso de migasfree:
+(( MIGASFREE == 0 )) && (( FORCEMIGAS == 0 )) && vx-kill-cliente-migasfree

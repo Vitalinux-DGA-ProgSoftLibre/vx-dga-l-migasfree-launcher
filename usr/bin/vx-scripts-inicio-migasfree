@@ -1,0 +1,62 @@
+#!/bin/bash
+
+export _FIRST=/var/tmp/migasfree/first-tags.conf
+
+close_log_file (){
+    # Por si acaso, debermos cerrar el fichero antes
+    if [ -n "$LOGFILE" ] ; then
+        # Si el descriptor está ya cerrado para escritura, entonces no hago nada y salgo de la función
+        true 2>/dev/null >&6 || return 0
+        
+        # Sino, cerramos el desriptor 1 que apuntaba al fichero...para cerrarlo
+        exec 1>&-
+        # Ahora usamos el 6 para recuperar la salidas estandar/error originales
+        exec 1>&6
+        exec 2>&6
+        # Y cerramos el 6 usado
+        exec 6>&-
+        
+    fi
+
+}
+
+run_scripts ()
+{
+    local _PATH="$1"
+
+    if [ -d "$_PATH" ]
+    then
+        for _FILE in "$_PATH"/*.sh
+        do
+            if [ -r "$_FILE" ]
+            then
+                . "$_FILE"
+            fi
+        done
+    fi
+}
+
+LOGFILE="/var/log/vitalinux/vx-scripts-inicio-migasfree.log"
+! [ -d "/var/log/vitalinux" ] &&  mkdir -p /var/log/vitalinux
+if [ -n "$LOGFILE" ] ; then
+    ## Vamos a redireccionar las salidas pero antes de terminar querremos mandar el fichero generado por correo
+    ## Por lo que es conveniente cerrarlo antes de enviar.
+    ## Para ello nos guardamos el Descriptor de Fichero de la salida estandar en el 6 (libre) para recuperar
+    ## la salida estandar al final (en el caso de lanzarlo el cron no haría falta, ya que no necesitamos que salga nada por pantalla,
+    ## pero si cuando se hace 
+    ## en modo interactivo
+    exec 6>&1
+    ## Y redireccionamos todas las salidas al fichero
+    exec &>> "$LOGFILE"
+    trap 'close_log_file' INT TERM ERR EXIT
+    # Ojo, con el trap anterior, cuando termine el proceso de forma normal también intentará cerrar el archivo...controlar si está abierto en la función
+fi
+
+if test "${USER}" = "root" ; then
+	# execute prerun scripts
+    DIRSCRIPTS="/usr/share/migasfree-launcher/prerun.d"
+	if test -d "${DIRSCRIPTS}" ; then
+        run_scripts "${DIRSCRIPTS}"
+	fi
+fi
+

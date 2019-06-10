@@ -4,19 +4,6 @@
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
 
-<action id="migasfree.pkexec.actualizar">
-    <message>Authentication is required to force the Migasfree Update:</message>
-    <message xml:lang="es">Se requiere autenticación para forzar la Actualización Migasfree:</message>
-    <icon_name>migasfree</icon_name>
-    <defaults>
-      <allow_any>auth_admin</allow_any>
-      <allow_inactive>auth_admin</allow_inactive>
-      <allow_active>auth_admin</allow_active>
-    </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-migasfree-force-upgrade</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
-  </action>
-
 <action id="migasfree.pkexec.postinstalacion">
     <message>Authentication is required to return to post-installation:</message>
     <message xml:lang="es">Se requiere autenticación para volver a la post-instalación:</message>
@@ -27,19 +14,6 @@
       <allow_active>auth_admin</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-volver-a-postinstalacion</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
-  </action>
-
-<action id="migasfree.pkexec.computername">
-    <message>Authentication is required to modify the Migasfree Computer Name:</message>
-    <message xml:lang="es">Se requiere autenticación para modificar el Migasfree Computer Name:</message>
-    <icon_name>migasfree</icon_name>
-    <defaults>
-      <allow_any>auth_admin</allow_any>
-      <allow_inactive>auth_admin</allow_inactive>
-      <allow_active>auth_admin</allow_active>
-    </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-migasfree-computer-name</annotate>
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 
