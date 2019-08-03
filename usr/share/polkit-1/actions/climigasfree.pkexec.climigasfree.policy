@@ -30,4 +30,17 @@
     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
   </action>
 
+<action id="migasfree.pkexec.confcronmigasfree">
+    <message>Authentication is required to configure the Migasfree client behavior:</message>
+    <message xml:lang="es">Se requiere autenticación para configurar el comportamiento del cliente Migasfree:</message>
+    <icon_name>migasfree</icon_name>
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/vx-migasfree-launcher-conf-cron</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+  </action>
+
 </policyconfig>

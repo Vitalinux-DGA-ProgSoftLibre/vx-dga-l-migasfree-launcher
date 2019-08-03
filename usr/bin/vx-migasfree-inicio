@@ -10,9 +10,17 @@ MIGASFREE="$(crudini --get "${FICHCONFCRON}" "Configuration" "MIGASFREE")"
 
 # Si MIGASFREE=1 actualizaremos contra Migasfree, en caso contrario son los scripts
 if (( MIGASFREE == 1 )) ; then
-    migasfree-indicator --interval 24
+    ##migasfree-indicator --interval 24
+    NAME=vx-migas-start
+    DAEMON=/usr/bin/$NAME
+    PIDFILE=/var/run/$NAME.pid
+    
+    start-stop-daemon --start --oknodo --quiet -b \
+    --name "${NAME}" \
+    -m --pidfile "${PIDFILE}" \
+    -a "${DAEMON}"
 else
-    sudo vx-scripts-inicio-migasfree
-    sudo vx-scripts-apagado-migasfree
+    vx-scripts-inicio-migasfree
+    vx-scripts-apagado-migasfree
 fi
 

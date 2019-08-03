@@ -1,11 +1,11 @@
-#! /bin/sh
+#! /bin/bash
 ### BEGIN INIT INFO
-# Provides:
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
+# Provides: vx-migas-stop
+# Required-Start:    $remote_fs $syslog $network $local_fs $named
+# Required-Stop:     halt
 # Default-Start:
 # Default-Stop:      0 6
-# Short-Description: Regenerate desktop environment
+# Short-Description: Stop Migasfree
 ### END INIT INFO
 
 # Author: Vitalinux Team <vitalinux@educa.aragon.es>
@@ -13,30 +13,51 @@
 # Do NOT "set -e"
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
-export PATH="${PATH:+$PATH:}/usr/sbin:/sbin:/bin:/usr/bin"
-DESC="Servicio encargado en mantener el equipo encendido hasta que la sincronización con Migasfree Termine"
+# export PATH="${PATH:+$PATH:}/usr/sbin:/sbin:/bin:/usr/bin"
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+#DESC="Servicio encargado en mantener el equipo encendido hasta que la sincronización con Migasfree Termine"
 NAME=vx-migas-stop
-DAEMON=/usr/bin/$NAME
-PIDFILE=/var/run/$NAME.pid
-SCRIPTNAME=/etc/init.d/$NAME
-
-# Exit if the package is not installed
-[ -x "$DAEMON" ] || exit 0
-
-# Read configuration variable file if it is present
-[ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
 
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
 #
 # Function that starts the daemon/service
 #
+
 lanzar_servicio() {
-    start-stop-daemon --start --oknodo --quiet -b \
-    --name "${NAME}" \
-    -m --pidfile "${PIDFILE}" \
-    -a "${DAEMON}"
+    # Contamos las líneas del LOG de comunicación para saber si esta bloqueada la comunicación:
+    LOGCOMUNICACION="/var/log/vitalinux/vx-comunicacion_migasfree.log"
+    NLINEAS="$(wc -l < "${LOGCOMUNICACION}")"
+    FLAGBLOQUEO=0
+    # Generamos un LOG del estado del control del apagado según la actualización contra Migasfree:
+    MILOG="/var/log/vitalinux/vx-estado-migasfree-en-apagado.log"
+    echo "$(date) -  Servicio de Control de Apagado ante la acutalización de Migasfree ..." > $MILOG
+    NAME="migasfree-launcher"
+    CONTADOR=0
+    # En el caso de que el LOG de comunicación en 15 minutos no varíe su número de líneas damos por
+    #  bloqueada la comunicacióon con migasfree y terminamos igualmente:
+    while /usr/bin/pgrep -f "${NAME}" >> $MILOG 2>> $MILOG && \
+    (( (( FLAGBLOQUEO == 0 )) || (( FLAGBLOQUEO == 1 && $((CONTADOR - CONTADORANT)) < 900 )) )); do
+        echo "$(date) - Migasfree se esta actualizando (${CONTADOR}sg.-${NLINEAS}linlog) - Esperaremos a terminar!!" >> $MILOG
+        sleep 5
+        CONTADOR=$((CONTADOR + 5))
+        NLINEASANT=${NLINEAS}
+        NLINEAS="$(wc -l < "${LOGCOMUNICACION}")"
+        if (( NLINEAS == NLINEASANT && FLAGBLOQUEO == 0 )) ; then
+            FLAGBLOQUEO=1
+            CONTADORANT=${CONTADOR}
+        fi
+        if (( NLINEAS != NLINEASANT && FLAGBLOQUEO == 1 )) ; then
+            FLAGBLOQUEO=0
+        fi
+    done
+    echo "$(date) - Actualización contra Migasfree Terminada - Puede apagarse el equipo ..." >> $MILOG
 }
 
 #
@@ -53,18 +74,16 @@ do_stop()
     return 0
 }
 
-
 case "$1" in
-    stop)
-        [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
-        do_stop
-        case "$?" in
-            0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-            2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
-        esac
+    start)
+        # No-op
     ;;
-    status)
-        status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+    stop)
+        do_stop
+    ;;
+    *)
+        echo "Usage: $0 start|stop" >&2
+        exit 3
     ;;
 esac
 

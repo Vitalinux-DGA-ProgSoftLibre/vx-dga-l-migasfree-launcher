@@ -19,42 +19,53 @@ set -e
 
 case "$1" in
     remove)
+        
+        # Eliminamos los enlaces al servicio de parada:
+        # Eliminamos los enlaces a los servicios de parada para init 0 y 6:
+        ENLACE="S01vx-migas-stop"
+        [ -L "/etc/rc0.d/${ENLACE}" ] && \
+        rm -f "/etc/rc0.d/${ENLACE}" && \
+        echo "=> Eliminado /etc/rc0.d/${ENLACE}"
+        [ -L "/etc/rc6.d/${ENLACE}" ] && \
+        rm -f "/etc/rc6.d/${ENLACE}" && \
+        echo "=> Eliminado /etc/rc6.d/${ENLACE}"
+        
         _FILE=/etc/update-manager/release-upgrades
         [ -L $_FILE ] && rm $_FILE
         dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
-             --divert $_FILE.orig $_FILE
-
+        --divert $_FILE.orig $_FILE
+        
         _FILE=/etc/xdg/autostart/migasfree-indicator.desktop
         [ -L $_FILE ] && rm $_FILE
         dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
-             --divert $_FILE.orig $_FILE
-
-	if dpkg-divert --list | grep /usr/bin/migasfree-launcher &> /dev/null ; then
-	_FILE=/usr/bin/migasfree-launcher
-          [ -L $_FILE ] && rm $_FILE
-          dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
-             --divert $_FILE.orig $_FILE
-	fi
-
-# Registramos los iconos
-for DIRECTORIO in /usr/share/icons/hicolor /usr/share/vitalinux/iconos ; do
-	if test -d $DIRECTORIO ; then
-		if /usr/sbin/update-icon-caches $DIRECTORIO ; then
-			echo "--> Se han actualizado y registrado los iconos de $DIRECTORIO ..."
-		else
-			echo "--> Problemas al actualizar y registrar los iconos de $DIRECTORIO ..."
-		fi
-	fi
-done
-
+        --divert $_FILE.orig $_FILE
+        
+        if dpkg-divert --list | grep /usr/bin/migasfree-launcher &> /dev/null ; then
+            _FILE=/usr/bin/migasfree-launcher
+            [ -L $_FILE ] && rm $_FILE
+            dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
+            --divert $_FILE.orig $_FILE
+        fi
+        
+        # Registramos los iconos
+        for DIRECTORIO in /usr/share/icons/hicolor /usr/share/vitalinux/iconos ; do
+            if test -d $DIRECTORIO ; then
+                if /usr/sbin/update-icon-caches $DIRECTORIO ; then
+                    echo "--> Se han actualizado y registrado los iconos de $DIRECTORIO ..."
+                else
+                    echo "--> Problemas al actualizar y registrar los iconos de $DIRECTORIO ..."
+                fi
+            fi
+        done
+        
     ;;
-
+    
     upgrade|deconfigure)
     ;;
-
+    
     failed-upgrade)
     ;;
-
+    
     *)
         echo "prerm called with unknown argument \`$1'" >&2
         exit 1

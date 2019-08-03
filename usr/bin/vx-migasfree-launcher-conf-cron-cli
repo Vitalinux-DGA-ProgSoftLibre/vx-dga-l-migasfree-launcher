@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function uso() {
+    echo "=> Uso del script de configuración del CRON de Migasfree (parámetros):"
+    echo "1 parámetro) set|SET"
+    echo "2 parámetro) MIGASFREE|FRECUENCY"
+    echo "3 parámetro) Valor a asignar a MIGASFREE|FRECUENCY: 0|1|7"
+}
+
+USER="$(whoami)"
+[[ "${USER}" != "root" ]] && echo "Necesitas ser root ..." && exit 1
+
+FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron.conf"
+# Si no recibe parametros el script informamos del valor de las variables de configuración:
+if [ -z "${1}" ] ; then
+    cat "${FICHCONFCRON}"
+    echo "  ================  "
+    uso
+    exit 0
+fi
+if [[ "${1}" =~ set|SET ]] && [[ "${2}" =~ MIGASFREE|FRECUENCY ]] && [[ "${3}" =~ 0|1|7 ]]; then
+    crudini --set "${FICHCONFCRON}" "Configuration" "${2}" "${3}"
+else
+    uso
+fi

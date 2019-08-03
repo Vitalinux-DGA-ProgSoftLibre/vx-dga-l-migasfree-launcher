@@ -1,24 +1,37 @@
 #!/bin/bash
 
-function uso() {
-    echo "HELP!!"
-    echo "En el caso de introducir parámetros:"
-    echo "1 parámetro) set|SET"
-    echo "2 parámetro) MIGASFREE|FRECUENCY"
-    echo "3 parámetro) Valor a asignar a MIGASFREE|FRECUENCY: 0|1|7"
+TITULO="Configurar CRON Migasfree Launcher"
+
+function salir() {
+    yad --title "${TITULO}" \
+    --center \
+    --width "500" \
+    --height "400" \
+    --fixed \
+    --text "${1}" \
+    --button "Salir":"${2}"
+    exit "${2}"
 }
 
 USER="$(whoami)"
-[[ "${USER}" != "root" ]] && exit 1
+[[ "${USER}" != "root" ]] && salir "Debes ser Root para Configurar el CRON de Migasfree Launcher" "1"
 
-FICHCONFCRON="/etc/default/vx-dga-variables/vx-dga-l-migasfree-launcher-cron.conf"
-# Si no recibe parametros el script informamos del valor de las variables de configuración:
-if [ -z "${1}" ] ; then
-    cat "${FICHCONFCRON}"
-    exit 0
-fi
-if [[ "${1}" =~ set|SET ]] && [[ "${2}" =~ MIGASFREE|FRECUENCY ]] ; then
-    crudini --set "${FICHCONFCRON}" "Configuration" "${2}" "${3}"
-else
-    uso
+# En la columna oculta (HD/HiDden) obtenemos la opción escogida.  Por defecto una vez al día (7):
+# La frecuencia puede ser: 0:daily_every_sessions|7:daily|1:weekly
+if RESPUESTA="$(yad --title "${TITULO}" \
+--center \
+--window-icon "vitalinux" \
+--image "migasfree" \
+--width 400 --height 150 --fixed \
+--text "Elige la frecuencia con que quieres que tu equipo se actualice contra Migasfree" \
+--list --radiolist \
+--column "Opción":RD \
+--column "Frecuencia Lanzar Migasfree Launcher":HD \
+--column "Descripción":TEXT \
+FALSE 0 "Tantas como veces se inicia el equipo" \
+TRUE 7 "Una vez al día" \
+FALSE 1 "Una vez a la semana" \
+--button "Confirmar":0 --button "Cancelar":1)" ; then
+    OPCION="$(echo "${RESPUESTA}" | cut -d"|" -f2)"
+    vx-migasfree-launcher-conf-cron-cli "${OPCION}"
 fi

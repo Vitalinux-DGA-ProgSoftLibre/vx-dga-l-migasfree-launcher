@@ -1,0 +1,3 @@
+#!/bin/bash
+
+migasfree-indicator --interval 24

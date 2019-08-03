@@ -1,5 +1,6 @@
 vx-dga-l-migasfree-launcher (7.0-1) unstable; urgency=low
 
+  * El Script de INIT vx-migas-stop evita que se apague el equipo mientras se actualiza contra Migasfree
   * Hacemos un divert sobre /etc/xdg/autostart/migasfree-indicator.desktop
   * Controlamos el inicio de Migasfree con migasfree-indicator.desktop
   * Configuramos CRON para decidir si migasfree tiene que iniciarse o no
@@ -7,6 +8,7 @@ vx-dga-l-migasfree-launcher (7.0-1) unstable; urgency=low
   * Se añade la dependencia con crudini para gestionar las variables de configuración
   * Se crea un pequeño script vx-migasfree-launcher-cron para gestionar la configuración
   * Hacemos uso de readlink para configurar vx-conf-migasfree-launcher-cli
+  * Upgrade a Libreoffice 6.1 como suite ofimático base
 
  -- Arturo Martín <amartinromero@gmail.com>  Tue, 19 Mar 2019 00:15:06 +0200
 

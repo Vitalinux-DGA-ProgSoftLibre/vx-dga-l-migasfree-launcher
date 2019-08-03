@@ -1,0 +1,71 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:
+# Default-Stop:      0 6
+# Short-Description: Regenerate desktop environment
+### END INIT INFO
+
+# Author: Vitalinux Team <vitalinux@educa.aragon.es>
+
+# Do NOT "set -e"
+
+# PATH should only include /usr/* if it runs after the mountnfs.sh script
+export PATH="${PATH:+$PATH:}/usr/sbin:/sbin:/bin:/usr/bin"
+DESC="Servicio encargado en mantener el equipo encendido hasta que la sincronización con Migasfree Termine"
+NAME=vx-migas-stop
+DAEMON=/usr/bin/$NAME
+PIDFILE=/var/run/$NAME.pid
+SCRIPTNAME=/etc/init.d/$NAME
+
+# Exit if the package is not installed
+[ -x "$DAEMON" ] || exit 0
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+#
+# Function that starts the daemon/service
+#
+lanzar_servicio() {
+    start-stop-daemon --start --oknodo --quiet -b \
+    --name "${NAME}" \
+    -m --pidfile "${PIDFILE}" \
+    -a "${DAEMON}"
+}
+
+#
+# Function that stops the daemon/service
+#
+do_stop()
+{
+    # Return
+    #   0 if daemon has been stopped
+    #   1 if daemon was already stopped
+    #   2 if daemon could not be stopped
+    #   other if a failure occurred
+    lanzar_servicio
+    return 0
+}
+
+
+case "$1" in
+    stop)
+        [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+        do_stop
+        case "$?" in
+            0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+            2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+        esac
+    ;;
+    status)
+        status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+    ;;
+esac
+
+exit 0

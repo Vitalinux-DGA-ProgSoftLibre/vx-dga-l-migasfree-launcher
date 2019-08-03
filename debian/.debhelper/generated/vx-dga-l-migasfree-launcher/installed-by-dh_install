@@ -3,4 +3,5 @@
 ./etc/cron.daily
 ./etc/cron.weekly
 ./etc/default
+./etc/init.d
 ./etc/sudoers.d
