@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# LLamada a migasfree en modo servicio para luego tener control en su parada.
+# De esta forma tratamos de evitar que se apague el equipo antes de que termine la comunicación con Migasfree
+
+NAME=vx-migas-start
+DAEMON=/usr/bin/$NAME
+PIDFILE=/var/run/$NAME.pid
+
+#start-stop-daemon --start --oknodo --quiet -b \
+start-stop-daemon --start --oknodo --quiet \
+--name "${NAME}" \
+-m --pidfile "${PIDFILE}" \
+-a "${DAEMON}"

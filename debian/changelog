@@ -1,5 +1,7 @@
 vx-dga-l-migasfree-launcher (7.0-1) unstable; urgency=low
 
+  * Hacemos que la post-instalación se ejecute antes que los prerun.d
+  * Divertimos el /usr/bin/migasfree-launcher para personalizarlo
   * El Script de INIT vx-migas-stop evita que se apague el equipo mientras se actualiza contra Migasfree
   * Hacemos un divert sobre /etc/xdg/autostart/migasfree-indicator.desktop
   * Controlamos el inicio de Migasfree con migasfree-indicator.desktop
@@ -10,7 +12,7 @@ vx-dga-l-migasfree-launcher (7.0-1) unstable; urgency=low
   * Hacemos uso de readlink para configurar vx-conf-migasfree-launcher-cli
   * Upgrade a Libreoffice 6.1 como suite ofimático base
 
- -- Arturo Martín <amartinromero@gmail.com>  Tue, 19 Mar 2019 00:15:06 +0200
+ -- Arturo Martín <amartinromero@gmail.com>  Fri, 27 Sep 2019 00:15:06 +0200
 
 vx-dga-l-migasfree-launcher (6.1-7) unstable; urgency=low
 

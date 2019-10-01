@@ -104,18 +104,19 @@ case "$1" in
         [ ! -e $_FILE -o -L $_FILE ] && \
         ln -sf /usr/share/divert$_FILE $_FILE
         
-        # Divert del script de migasfree-launcher:
+        # Reseteamos el Divert del script de migasfree-launcher:
         if dpkg-divert --list | grep /usr/bin/migasfree-launcher &> /dev/null ; then
             _FILE=/usr/bin/migasfree-launcher
             [ -L $_FILE ] && rm $_FILE
             dpkg-divert --remove --package vx-dga-l-migasfree-launcher --rename \
             --divert $_FILE.orig $_FILE
         fi
-        # _FILE=/usr/bin/migasfree-launcher
-        # dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \
-        # --divert $_FILE.orig $_FILE
-        # [ ! -e $_FILE -o -L $_FILE ] && \
-        # ln -sf /usr/share/divert$_FILE $_FILE
+        
+        _FILE=/usr/bin/migasfree-launcher
+        dpkg-divert --add --package vx-dga-l-migasfree-launcher --rename \
+        --divert $_FILE.orig $_FILE
+        [ ! -e $_FILE -o -L $_FILE ] && \
+        ln -sf /usr/share/divert$_FILE $_FILE
         
         # Ya no es necesario tareas-logout...todo se centraliza en vx-scripts-apagado, y se configura en skel
         #if ! test -f /usr/bin/tareas-logout ; then
